@@ -3,10 +3,10 @@
 #include <string.h>
 #include "omp.h"
 
-#define bufSize 1024
+#define inputBufferSize 1000000
 
 
-char *readFile(char *const *argv, const FILE *fp, char *buf);
+char *readFile(char *const *argv, const FILE *fp, char *buf, char string[1000000]);
 
 int main(int argc, char *argv[] ) {
 //    printf("Hello, World!\n");
@@ -20,12 +20,11 @@ int main(int argc, char *argv[] ) {
         return 1;
     }
 
-//    printf("%s", argv[1]);
 
     FILE* fp;
-    char buf[bufSize];
+    char buf[inputBufferSize];
 
-    readFile(argv, fp, buf);
+    readFile(argc, argv, fp, buf);
 
 
 
@@ -35,7 +34,7 @@ int main(int argc, char *argv[] ) {
 
 
 
-char *readFile(char *const *argv, const FILE *fp, char *buf) {
+char *readFile(char *const *argv, const FILE *fp, char *buf, char string[1000000]) {
     if ((fp = fopen(argv[1], "r")) == NULL)
     { /* Open source file. */
         perror("fopen source-file");
