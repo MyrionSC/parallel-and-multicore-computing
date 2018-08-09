@@ -3,50 +3,60 @@
 #include <string.h>
 #include "omp.h"
 
-#define inputBufferSize 1000000
+char *readFile(char *const *argv);
 
-
-char *readFile(char *const *argv, const FILE *fp, char *buf);
-
-int main(int argc, char *argv[] ) {
-//    printf("Hello, World!\n");
-//    printf("Max available threads: %d\n", omp_get_max_threads());
-
+int main(int argc, char *argv[]) {
     // if argv[1] not given, exit
-    if (argc != 2)
-    {
+    if (argc != 2) {
         fprintf(stderr,
                 "Usage: %s <input-file>\n", argv[0]);
         return 1;
     }
 
+    // read file into buffer
+    char *inputBuffer = readFile(argv);
+    printf("%s", inputBuffer);
 
-    FILE* fp;
-    char buf[inputBufferSize];
-
-    readFile(argv, fp, buf);
+    // create adjacancy matrix from input
 
 
+
+
+    // run floyd-warshall algorithm
+
+
+
+
+    // extract diameter
+
+
+    free(inputBuffer);
 
     return 0;
 }
 
 
+char *readFile(char *const *argv) {
 
+    FILE *infile;
+    char* buffer;
+    long numbytes;
 
-char *readFile(char *const *argv, const FILE *fp, char *buf) {
-    if ((fp = fopen(argv[1], "r")) == NULL)
-    { /* Open source file. */
-        perror("fopen source-file");
+    infile = fopen(argv[1], "r");
+
+    if (infile == NULL)
         return 1;
-    }
 
-    while (fgets(buf, sizeof(buf), fp) != NULL)
-    {
-        buf[strlen(buf) - 1] = '\0'; // eat the newline fgets() stores
-        printf("%s\n", buf);
-    }
-    fclose(fp);
+    fseek(infile, 0L, SEEK_END);
+    numbytes = ftell(infile);
+    fseek(infile, 0L, SEEK_SET);
 
-    return buf;
+    buffer = (char *) calloc(numbytes, sizeof(char));
+    if (buffer == NULL)
+        return 1;
+
+    fread(buffer, sizeof(char), numbytes, infile);
+    fclose(infile);
+
+    return buffer;
 }
