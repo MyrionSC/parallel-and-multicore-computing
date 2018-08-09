@@ -3,10 +3,14 @@
 #include <string.h>
 #include "omp.h"
 
+/// Prototypes.
 unsigned readFile(char *const *argv, char **buffer);
 
 int main(int argc, char *argv[]) {
-    // if argv[1] not given, exit
+    /// Timing scope.
+    double startTime = omp_get_wtime();
+
+    /// if argv[1] not given, exit.
     if (argc != 2) {
         fprintf(stderr,
                 "Usage: %s <input-file>\n", argv[0]);
@@ -15,35 +19,41 @@ int main(int argc, char *argv[]) {
 
     // read file into buffer
     char *inputBuffer = NULL;
-    int numBytes = readFile(argv, &inputBuffer);
+    readFile(argv, &inputBuffer);
 
 
     // create adjacancy matrix from input
     int dim = (int)*inputBuffer - '0';
+    int matrix[dim][dim];
+    memset(matrix, 0, sizeof matrix);
 
+    /// Parse input data.
     char *pch = strtok (inputBuffer,"\n\r");
     pch = strtok (NULL, "\n\r");
     while (pch != NULL)
     {
-        int from, to, weight;
+        int from, to, weight = 0;
         sscanf(pch, "%d %d %d", &from, &to, &weight);
-
-        printf("%d %d %d\n", from, to, weight);
-
-//        printf ("%s\n",pch);
+        matrix[from-1][to-1] = weight;
         pch = strtok (NULL, "\n\r");
     }
 
+    /// Create weighted matrix.
+    for (int i = 0; i < dim ; ++i) {
+        for (int j = 0; j < dim ; ++j) {
+            printf("%d ", matrix[i][j]);
+        }
+        printf("\n");
+    }
 
     // run floyd-warshall algorithm
-
-
-
-
     // extract diameter
 
-
+    /// Free dynamically allocated memory.
     free(inputBuffer);
+
+    /// Print execution time.
+    printf("Scope execution time: %f sec", omp_get_wtime()-startTime);
 
     return 0;
 }
