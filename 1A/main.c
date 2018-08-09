@@ -3,7 +3,7 @@
 #include <string.h>
 #include "omp.h"
 
-char *readFile(char *const *argv);
+unsigned readFile(char *const *argv, char **buffer);
 
 int main(int argc, char *argv[]) {
     // if argv[1] not given, exit
@@ -14,7 +14,10 @@ int main(int argc, char *argv[]) {
     }
 
     // read file into buffer
-    char *inputBuffer = readFile(argv);
+
+    char *inputBuffer = NULL;
+    int numBytes = readFile(argv, &inputBuffer);
+    printf("%d\n", numBytes);
     printf("%s", inputBuffer);
 
     // create adjacancy matrix from input
@@ -36,27 +39,26 @@ int main(int argc, char *argv[]) {
 }
 
 
-char *readFile(char *const *argv) {
+unsigned readFile(char *const *argv, char **buffer) {
 
     FILE *infile;
-    char* buffer;
-    long numbytes;
+    size_t numbytes;
 
     infile = fopen(argv[1], "r");
 
     if (infile == NULL)
-        return 1;
+        return 0;
 
     fseek(infile, 0L, SEEK_END);
-    numbytes = ftell(infile);
+    numbytes = (size_t) ftell(infile);
     fseek(infile, 0L, SEEK_SET);
 
-    buffer = (char *) calloc(numbytes, sizeof(char));
-    if (buffer == NULL)
-        return 1;
+    *buffer = (char *) calloc(numbytes, sizeof(char));
+    if (*buffer == NULL)
+        return 0;
 
-    fread(buffer, sizeof(char), numbytes, infile);
+    fread(*buffer, sizeof(char), numbytes, infile);
     fclose(infile);
 
-    return buffer;
+    return numbytes;
 }
