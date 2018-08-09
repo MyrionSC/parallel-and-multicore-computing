@@ -1,3 +1,3 @@
-/home/martin/uni/melbourne/parallel-and-multicore-computing/projects/1A/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/martin/uni/melbourne/parallel-and-multicore-computing/projects/1A/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/martin/uni/melbourne/parallel-and-multicore-computing/projects/1A/cmake-build-debug/CMakeFiles/1A.dir
+C:/Users/Matthijs/OneDrive - Universiteit Twente/UTwente/Quater_6(2018-2A)/Parallel_and_Multicore_Computing/Assignments/1A/cmake-build-debug/CMakeFiles/1A.dir
+C:/Users/Matthijs/OneDrive - Universiteit Twente/UTwente/Quater_6(2018-2A)/Parallel_and_Multicore_Computing/Assignments/1A/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Matthijs/OneDrive - Universiteit Twente/UTwente/Quater_6(2018-2A)/Parallel_and_Multicore_Computing/Assignments/1A/cmake-build-debug/CMakeFiles/rebuild_cache.dir

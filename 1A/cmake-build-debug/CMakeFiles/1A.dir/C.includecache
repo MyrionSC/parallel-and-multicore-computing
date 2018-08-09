@@ -6,7 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/martin/uni/melbourne/parallel-and-multicore-computing/projects/1A/main.c
+C:/Users/Matthijs/OneDrive - Universiteit Twente/UTwente/Quater_6(2018-2A)/Parallel_and_Multicore_Computing/Assignments/1A/main.c
 stdio.h
 -
+omp.h
+C:/Users/Matthijs/OneDrive - Universiteit Twente/UTwente/Quater_6(2018-2A)/Parallel_and_Multicore_Computing/Assignments/1A/omp.h
 

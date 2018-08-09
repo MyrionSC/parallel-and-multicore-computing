@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/martin/uni/melbourne/parallel-and-multicore-computing/projects/1A/main.c" "/home/martin/uni/melbourne/parallel-and-multicore-computing/projects/1A/cmake-build-debug/CMakeFiles/1A.dir/main.c.o"
+  "C:/Users/Matthijs/OneDrive - Universiteit Twente/UTwente/Quater_6(2018-2A)/Parallel_and_Multicore_Computing/Assignments/1A/main.c" "C:/Users/Matthijs/OneDrive - Universiteit Twente/UTwente/Quater_6(2018-2A)/Parallel_and_Multicore_Computing/Assignments/1A/cmake-build-debug/CMakeFiles/1A.dir/main.c.obj"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
