@@ -1,0 +1,3 @@
+/home/martin/uni/melbourne/parallel-and-multicore-computing/projects/1A/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/martin/uni/melbourne/parallel-and-multicore-computing/projects/1A/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/martin/uni/melbourne/parallel-and-multicore-computing/projects/1A/cmake-build-debug/CMakeFiles/1A.dir
