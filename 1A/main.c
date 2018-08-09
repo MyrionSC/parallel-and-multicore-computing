@@ -14,15 +14,25 @@ int main(int argc, char *argv[]) {
     }
 
     // read file into buffer
-
     char *inputBuffer = NULL;
     int numBytes = readFile(argv, &inputBuffer);
-    printf("%d\n", numBytes);
-    printf("%s", inputBuffer);
+
 
     // create adjacancy matrix from input
+    int dim = (int)*inputBuffer - '0';
 
+    char *pch = strtok (inputBuffer,"\n\r");
+    pch = strtok (NULL, "\n\r");
+    while (pch != NULL)
+    {
+        int from, to, weight;
+        sscanf(pch, "%d %d %d", &from, &to, &weight);
 
+        printf("%d %d %d\n", from, to, weight);
+
+//        printf ("%s\n",pch);
+        pch = strtok (NULL, "\n\r");
+    }
 
 
     // run floyd-warshall algorithm
