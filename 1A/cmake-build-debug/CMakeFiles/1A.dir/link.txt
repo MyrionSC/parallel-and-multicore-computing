@@ -1,3 +1,1 @@
-"C:\Program Files\JetBrains\CLion 2018.2\bin\cmake\win\bin\cmake.exe" -E remove -f CMakeFiles\1A.dir/objects.a
-C:\Qt\Tools\mingw492_32\bin\ar.exe cr CMakeFiles\1A.dir/objects.a @CMakeFiles\1A.dir\objects1.rsp
-C:\Qt\Tools\mingw492_32\bin\gcc.exe  -fopenmp -g    -Wl,--whole-archive CMakeFiles\1A.dir/objects.a -Wl,--no-whole-archive  -o 1A.exe -Wl,--out-implib,lib1A.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\1A.dir\linklibs.rsp
+/usr/bin/cc  -fopenmp -g    CMakeFiles/1A.dir/main.c.o  -o 1A 
