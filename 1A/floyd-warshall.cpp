@@ -68,7 +68,7 @@ int main(int argc, char** argv){
         for (int j=1;j<=nodesCount;++j){
             if (diameter<distance[i][j]){
                 diameter=distance[i][j];
-                //printf("%d-%d-%d\n", i, diameter, j);
+                printf("%d-%d-%d\n", i, diameter, j);
             }
         }
     }

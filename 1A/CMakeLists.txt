@@ -11,3 +11,10 @@ if (OPENMP_FOUND)
 endif()
 
 add_executable(1A main.c)
+
+
+# cmake for floyd-warshall
+#cmake_minimum_required(VERSION 3.12)
+#project(1A)
+#add_executable(1A floyd-warshall.cpp)
+
