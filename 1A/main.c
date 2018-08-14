@@ -3,82 +3,88 @@
 #include <string.h>
 #include "omp.h"
 
+
+
+#define MAX 10000
+#define NOT_CONNECTED -1
+
+int distance[MAX][MAX];
+
+int nodesCount;
+
+void Initialize(){
+    for (int i=0;i<MAX;++i){
+        for (int j=0;j<MAX;++j){
+            distance[i][j]=NOT_CONNECTED;
+
+        }
+        distance[i][i]=0;
+    }
+}
+
 /// Prototypes.
-unsigned readFile(char *const *argv, char **buffer);
 
 int main(int argc, char *argv[]) {
+
+//    printf("%d\n", omp_get_max_threads());
+
     /// Timing scope.
     double startTime = omp_get_wtime();
 
-    /// if argv[1] not given, exit.
-    if (argc != 2) {
-        fprintf(stderr,
-                "Usage: %s <input-file>\n", argv[0]);
-        return 1;
+
+    if(argc!=2){
+        printf("The path to the input file is not specified as a parameter.\n");
+        return -1;
     }
-
-    // read file into buffer
-    char *inputBuffer = NULL;
-    readFile(argv, &inputBuffer);
-
-
-    // create adjacancy matrix from input
-    int dim = (int)*inputBuffer - '0';
-    int matrix[dim][dim];
-    memset(matrix, 0, sizeof matrix);
-
-    /// Parse input data.
-    char *pch = strtok (inputBuffer,"\n\r");
-    pch = strtok (NULL, "\n\r");
-    while (pch != NULL)
+    FILE *in_file  = fopen(argv[1], "r");
+    if (in_file  == NULL)
     {
-        int from, to, weight = 0;
-        sscanf(pch, "%d %d %d", &from, &to, &weight);
-        matrix[from-1][to-1] = weight;
-        pch = strtok (NULL, "\n\r");
+        printf("Can't open file for reading.\n");
+        return -1;
     }
 
-    /// Create weighted matrix.
-    for (int i = 0; i < dim ; ++i) {
-        for (int j = 0; j < dim ; ++j) {
-            printf("%d ", matrix[i][j]);
+    /// Section 1: scan file into memory
+    Initialize();
+    fscanf(in_file,"%d", &nodesCount);
+    int a, b, c;
+    while(fscanf(in_file,"%d %d %d", &a, &b, &c)!= EOF){
+        if ( a > nodesCount || b > nodesCount){
+            printf("Vertex index out of boundary.");
+            return -1;
         }
-        printf("\n");
+        distance[a][b]=c;
     }
 
-    // run floyd-warshall algorithm
-    // extract diameter
+    /// Section 2: Floyd-Warshall
+    for (int k=1;k<=nodesCount;++k){
+        for (int i=1;i<=nodesCount;++i){
+            if (distance[i][k]!=NOT_CONNECTED){
+                for (int j=1;j<=nodesCount;++j){
+                    if (distance[k][j]!=NOT_CONNECTED && (distance[i][j]==NOT_CONNECTED || distance[i][k]+distance[k][j]<distance[i][j])){
+                        distance[i][j]=distance[i][k]+distance[k][j];
+                    }
+                }
+            }
+        }
+    }
 
-    /// Free dynamically allocated memory.
-    free(inputBuffer);
+    int diameter=-1;
+
+    /// Section 3: look for the most distant pair
+    for (int i=1;i<=nodesCount;++i){
+        for (int j=1;j<=nodesCount;++j){
+            if (diameter<distance[i][j]){
+                diameter=distance[i][j];
+//                printf("%d-%d-%d\n", i, diameter, j);
+            }
+        }
+    }
+
+//    printf("%d\n", diameter);
+
 
     /// Print execution time.
     printf("Scope execution time: %f sec", omp_get_wtime()-startTime);
 
     return 0;
-}
-
-
-unsigned readFile(char *const *argv, char **buffer) {
-
-    FILE *infile;
-    size_t numbytes;
-
-    infile = fopen(argv[1], "r");
-
-    if (infile == NULL)
-        return 0;
-
-    fseek(infile, 0L, SEEK_END);
-    numbytes = (size_t) ftell(infile);
-    fseek(infile, 0L, SEEK_SET);
-
-    *buffer = (char *) calloc(numbytes, sizeof(char));
-    if (*buffer == NULL)
-        return 0;
-
-    fread(*buffer, sizeof(char), numbytes, infile);
-    fclose(infile);
-
-    return numbytes;
 }
