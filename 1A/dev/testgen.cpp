@@ -8,10 +8,10 @@ using namespace std;
 #define RUN 1
 
 // Define the maximum number of vertices of the graph
-#define MAX_VERTICES 1000
+#define MAX_VERTICES 2000
 
 // Define the maximum number of edges
-#define MAX_EDGES 10000
+#define MAX_EDGES 20000
 
 // Define the maximum weight of edges
 #define MAXWEIGHT 200
