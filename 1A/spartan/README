@@ -1,0 +1,8 @@
+to use on spartan:
+
+copy main.c into folder
+run compile-options.sh
+run add-batch.sh
+run gather-output.sh when all jobs are done
+view output.txt
+
