@@ -4,7 +4,8 @@
 #include "omp.h"
 
 #define MAX 10000
-#define NOT_CONNECTED -1
+#define NOT_CONNECTED 9999
+#define MIN(a,b) ((a) < (b) ? a : b)
 
 // TODO Add multiple small test dataset with known solution that can be used to verify the functionality of the algorithm.
 // TODO Write a test script who compates the results of th algorithm with the test datasets.
@@ -27,7 +28,7 @@ void Initialize(){
 int main(int argc, char *argv[]) {
 
     int maxNrThreads = omp_get_max_threads();
-    printf("%Max threads: %d\n", maxNrThreads);
+    printf("Max threads: %d\n", maxNrThreads);
 
     /// Set number of threads.
     omp_set_num_threads(maxNrThreads);
@@ -58,27 +59,20 @@ int main(int argc, char *argv[]) {
         }
         distance[a][b]=c;
     }
+    printf("Section 1: %f sec\n", omp_get_wtime()-startTime);
+
 
     /// Section 2: Floyd-Warshall
-    #pragma omp parallel
-    {
-        #pragma for collapse(2)
-        for (int k = 1; k <= nodesCount; ++k) {
-            for (int i = 1; i <= nodesCount; ++i) {
-                #pragma omp critical
-                {
-                    if (distance[i][k] != NOT_CONNECTED) {
-                        for (int j = 1; j <= nodesCount; ++j) {
-                            if (distance[k][j] != NOT_CONNECTED &&
-                                (distance[i][j] == NOT_CONNECTED || distance[i][k] + distance[k][j] < distance[i][j])) {
-                                distance[i][j] = distance[i][k] + distance[k][j];
-                            }
-                        }
-                    }
+    #pragma omp parallel for
+    for (int k = 1; k <= nodesCount; ++k) {
+        for (int i = 1; i <= nodesCount; ++i) {
+                for (int j = 1; j <= nodesCount; ++j) {
+                        distance[i][j] = MIN(distance[i][j], distance[i][k] + distance[k][j]);
                 }
-            }
         }
     }
+    printf("Section 2: %f sec\n", omp_get_wtime()-startTime);
+
 
     int diameter=-1;
 
