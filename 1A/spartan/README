@@ -1,0 +1,7 @@
+to use on spartan:
+
+copy main.c into folder
+run compile-options.sh
+run add-batch.sh
+
+

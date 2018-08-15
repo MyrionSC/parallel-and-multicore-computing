@@ -7,7 +7,9 @@
 #SBATCH --ntasks-per-node=2
 
 echo " "
-echo "dataset: example-input\n"
+echo " *** two cores ***"
+echo " "
+echo "dataset: example-input"
 time ./main example-input.txt
 
 echo " "
@@ -19,7 +21,6 @@ echo "dataset: 2000e-50000v"
 time ./main 2000v-50000e.txt
 
 echo " "
-echo "all done"
 
 
 
