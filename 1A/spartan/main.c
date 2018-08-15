@@ -59,19 +59,31 @@ int main(int argc, char *argv[]) {
         }
         distance[a][b]=c;
     }
-//    printf("Section 1: %f sec\n", omp_get_wtime()-startTime);
+    printf("Section 1: %f sec\n", omp_get_wtime()-startTime);
 
+    //(readPointer + (i * MAX) + j));
 
     /// Section 2: Floyd-Warshall
-    #pragma omp parallel for
+    int *dik = &distance[0][0];
+    int *dij = &distance[0][0];
+
+    #pragma omp parallel for firstprivate(dik, dij)
     for (int k = 1; k <= nodesCount; ++k) {
+        dik += k;
         for (int i = 1; i <= nodesCount; ++i) {
-                for (int j = 1; j <= nodesCount; ++j) {
-                        distance[i][j] = MIN(distance[i][j], distance[i][k] + distance[k][j]);
-                }
+            dik += MAX;
+            dij += MAX;
+            int *dijTmp = dij;
+
+            for (int j = 1; j <= nodesCount; ++j) {
+                dij++;
+                *dij = MIN(*dij, *dik + distance[k][j]);
+            }
+            dij = dijTmp;
         }
+        dik = dij = &distance[0][0];
     }
-//    printf("Section 2: %f sec\n", omp_get_wtime()-startTime);
+    printf("Section 2: %f sec\n", omp_get_wtime()-startTime);
 
 
     int diameter=-1;
@@ -81,13 +93,13 @@ int main(int argc, char *argv[]) {
         for (int j=1; j <= nodesCount; ++j){
             if (diameter < distance[i][j]){
                 diameter = distance[i][j];
-//                printf("%d-%d-%d\n", i, diameter, j);
+                //printf("%d-%d-%d\n", i, diameter, j);
             }
         }
     }
 
     /// Print execution time.
-//    printf("Scope execution time: %f sec\n", omp_get_wtime()-startTime);
+    printf("Scope execution time: %f sec\n", omp_get_wtime()-startTime);
 
     printf("%d\n", diameter);
 

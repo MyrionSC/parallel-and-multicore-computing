@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --output=8-cores.out
+#SBATCH --output=08-cores.out
 #SBATCH --job-name="M&M-1A-eight-cpu"
 #SBATCH --time=0-12:00:00
 #SBATCH --nodes=1

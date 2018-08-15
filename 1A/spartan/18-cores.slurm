@@ -1,13 +1,14 @@
 #!/bin/bash
 
-#SBATCH --output=04-cores.out
-#SBATCH --job-name="M&M-1A-four-cpu"
+#SBATCH --partition=bigmem
+#SBATCH --output=18-cores.out
+#SBATCH --job-name="M&M-1A-eighteen-cpu"
 #SBATCH --time=0-12:00:00
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=4
+#SBATCH --ntasks-per-node=18
 
 echo " "
-echo " *** Four cores ***"
+echo " *** Eighteen cores ***"
 echo " "
 echo "dataset: example-input"
 time ./main example-input.txt
