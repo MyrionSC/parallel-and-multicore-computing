@@ -26,11 +26,15 @@ void Initialize(){
 
 int main(int argc, char *argv[]) {
 
-//    printf("%d\n", omp_get_max_threads());
+    int maxNrThreads = omp_get_max_threads();
+    printf("%Max threads: %d\n", maxNrThreads);
 
+    /// Set number of threads.
+    omp_set_num_threads(maxNrThreads);
 
     /// Timing scope.
     double startTime = omp_get_wtime();
+
 
     if(argc!=2){
         printf("The path to the input file is not specified as a parameter.\n");
@@ -55,43 +59,38 @@ int main(int argc, char *argv[]) {
         distance[a][b]=c;
     }
 
-
-
     /// Section 2: Floyd-Warshall
-//    #pragma omp parallel
-//    {
-//        #pragma omp parallel for
-        for (int k=1;k<=nodesCount;++k){
-            for (int i=1;i<=nodesCount;++i){
-                if (distance[i][k]!=NOT_CONNECTED){
-                    for (int j=1;j<=nodesCount;++j){
-                        if (distance[k][j]!=NOT_CONNECTED && (distance[i][j]==NOT_CONNECTED || distance[i][k]+distance[k][j]<distance[i][j])){
-                            distance[i][j]=distance[i][k]+distance[k][j];
-                        }
+    #pragma omp parallel for collapse(2)
+    for (int k = 1; k <= nodesCount; ++k) {
+        for (int i = 1; i <= nodesCount; ++i) {
+            if (distance[i][k] != NOT_CONNECTED) {
+                for (int j = 1; j <= nodesCount; ++j) {
+                    if (distance[k][j] != NOT_CONNECTED &&
+                        (distance[i][j] == NOT_CONNECTED || distance[i][k] + distance[k][j] < distance[i][j])) {
+                        distance[i][j] = distance[i][k] + distance[k][j];
                     }
                 }
             }
         }
-//    }
-
+    }
 
     int diameter=-1;
 
     /// Section 3: look for the most distant pair
+    #pragma omp parallel for collapse(2)
     for (int i=1;i<=nodesCount;++i){
         for (int j=1;j<=nodesCount;++j){
             if (diameter<distance[i][j]){
                 diameter=distance[i][j];
-//                printf("%d-%d-%d\n", i, diameter, j);
+                printf("%d-%d-%d\n", i, diameter, j);
             }
         }
     }
 
-    printf("%d\n", diameter);
-
-
     /// Print execution time.
-    printf("Scope execution time: %f sec", omp_get_wtime()-startTime);
+    printf("Scope execution time: %f sec\n", omp_get_wtime()-startTime);
+
+    printf("%d\n", diameter);
 
     return 0;
 }
