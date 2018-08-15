@@ -1,15 +1,19 @@
+//
+// Created by Matthijs on 15/08/2018.
+//
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "omp.h"
 
+
+
 #define MAX 10000
 #define NOT_CONNECTED -1
 
-// TODO Add multiple small test dataset with known solution that can be used to verify the functionality of the algorithm.
-// TODO Write a test script who compates the results of th algorithm with the test datasets.
-
 int distance[MAX][MAX];
+
 int nodesCount;
 
 void Initialize(){
@@ -59,25 +63,23 @@ int main(int argc, char *argv[]) {
         distance[a][b]=c;
     }
 
+#warning it might go wrong because distance is a shared variable which is utilized concurrently which creates memory errors.
+
     /// Section 2: Floyd-Warshall
-    #pragma omp parallel
-    {
-        #pragma for collapse(2)
-        for (int k = 1; k <= nodesCount; ++k) {
-            for (int i = 1; i <= nodesCount; ++i) {
-                #pragma omp critical
-                {
-                    if (distance[i][k] != NOT_CONNECTED) {
-                        for (int j = 1; j <= nodesCount; ++j) {
-                            if (distance[k][j] != NOT_CONNECTED &&
-                                (distance[i][j] == NOT_CONNECTED || distance[i][k] + distance[k][j] < distance[i][j])) {
-                                distance[i][j] = distance[i][k] + distance[k][j];
-                            }
+    #pragma omp parallel for collapse(2){
+    for (int k = 1; k <= nodesCount; ++k) {
+        for (int i = 1; i <= nodesCount; ++i) {
+            if (distance[i][k] != NOT_CONNECTED) {
+                for (int j = 1; j <= nodesCount; ++j) {
+                    if (distance[k][j] != NOT_CONNECTED && (distance[i][j] == NOT_CONNECTED || distance[i][k] + distance[k][j] < distance[i][j])) {
+                        #pragma omp critical{
+                            distance[i][j] = distance[i][k] + distance[k][j];
                         }
                     }
                 }
             }
         }
+    }
     }
 
     int diameter=-1;
