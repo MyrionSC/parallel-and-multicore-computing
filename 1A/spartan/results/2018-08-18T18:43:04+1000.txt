@@ -1,0 +1,75 @@
+execution date: 2018-08-18T18:43:04+1000
+*******
+ 
+ 
+ *** two cores ***
+ 
+dataset: example-input
+Max threads: 2
+Section 1: 0.786189 sec
+Section 2: 0.786387 sec
+Scope execution time: 0.786391 sec
+9999
+
+real	0m0.909s
+user	0m0.544s
+sys	0m0.226s
+ 
+dataset: 1000e-10000v
+Max threads: 2
+Section 1: 0.762314 sec
+Section 2: 3.306988 sec
+Scope execution time: 3.309790 sec
+413
+
+real	0m3.316s
+user	0m5.499s
+sys	0m0.101s
+ 
+dataset: 2000e-50000v
+Max threads: 2
+Section 1: 0.468976 sec
+Section 2: 15.712764 sec
+Scope execution time: 15.724020 sec
+187
+
+real	0m15.728s
+user	0m30.738s
+sys	0m0.108s
+ 
+ 
+ *** Four cores ***
+ 
+dataset: example-input
+Max threads: 4
+Section 1: 0.867288 sec
+Section 2: 0.867525 sec
+Scope execution time: 0.867528 sec
+17
+
+real	0m0.992s
+user	0m0.637s
+sys	0m0.238s
+ 
+dataset: 1000e-10000v
+Max threads: 4
+Section 1: 0.736004 sec
+Section 2: 2.250854 sec
+Scope execution time: 2.254006 sec
+413
+
+real	0m2.260s
+user	0m6.316s
+sys	0m0.104s
+ 
+dataset: 2000e-50000v
+Max threads: 4
+Section 1: 0.504445 sec
+Section 2: 8.517793 sec
+Scope execution time: 8.527318 sec
+187
+
+real	0m8.535s
+user	0m32.027s
+sys	0m0.066s
+ 

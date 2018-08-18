@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --partition=bigmem
-#SBATCH --output=18-cores.out
+#SBATCH --output=output/18-cores.out
 #SBATCH --job-name="M&M-1A-eighteen-cpu"
 #SBATCH --time=0-12:00:00
 #SBATCH --nodes=1
@@ -11,15 +11,15 @@ echo " "
 echo " *** Eighteen cores ***"
 echo " "
 echo "dataset: example-input"
-time ./main example-input.txt
+time ./main input-files/example-input.txt
 
 echo " "
 echo "dataset: 1000e-10000v"
-time ./main 1000v-10000e.txt
+time ./main input-files/1000v-10000e.txt
 
 echo " "
 echo "dataset: 2000e-50000v"
-time ./main 2000v-50000e.txt
+time ./main input-files/2000v-50000e.txt
 
 echo " "
 
