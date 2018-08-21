@@ -3,6 +3,7 @@
 #include <string.h>
 #include "omp.h"
 
+//#define PRINT_ALL_SECTION
 #define MAX 10000
 #define NOT_CONNECTED 9999
 #define MIN(a,b) ((a) < (b) ? a : b)
@@ -33,10 +34,6 @@ int main(int argc, char *argv[]) {
     /// Set number of threads.
     omp_set_num_threads(maxNrThreads);
 
-    /// Timing scope.
-    double startTime = omp_get_wtime();
-
-
     if(argc!=2){
         printf("The path to the input file is not specified as a parameter.\n");
         return -1;
@@ -59,15 +56,19 @@ int main(int argc, char *argv[]) {
         }
         distance[a][b]=c;
     }
-    printf("Section 1: %f sec\n", omp_get_wtime()-startTime);
 
-    //(readPointer + (i * MAX) + j));
+    #ifdef PRINT_ALL_SECTION
+        printf("Section 1: %f sec\n", omp_get_wtime()-startTime);
+    #endif
 
     /// Section 2: Floyd-Warshall
+    /// Timing scope.
+    double timeBegin, timeEnd;
+    timeBegin = omp_get_wtime();
     int *dik = &distance[0][0];
     int *dij = &distance[0][0];
 
-    #pragma omp parallel for firstprivate(dik, dij)
+    #pragma omp parallel for firstprivate(dik, dij) schedule(static)
     for (int k = 1; k <= nodesCount; ++k) {
         dik += k;
         for (int i = 1; i <= nodesCount; ++i) {
@@ -83,8 +84,10 @@ int main(int argc, char *argv[]) {
         }
         dik = dij = &distance[0][0];
     }
-    printf("Section 2: %f sec\n", omp_get_wtime()-startTime);
 
+    #ifdef PRINT_ALL_SECTION
+        printf("Section 2: %f sec\n", omp_get_wtime()-startTime);
+    #endif
 
     int diameter=-1;
 
@@ -93,15 +96,14 @@ int main(int argc, char *argv[]) {
         for (int j=1; j <= nodesCount; ++j){
             if (diameter < distance[i][j]){
                 diameter = distance[i][j];
-                printf("%d-%d-%d\n", i, diameter, j);
+//                printf("%d-%d-%d\n", i, diameter, j);
             }
         }
     }
 
     /// Print execution time.
-    printf("Scope execution time: %f sec\n", omp_get_wtime()-startTime);
-
-    printf("%d\n", diameter);
+    timeEnd = omp_get_wtime();
+    printf("%d %.16g", diameter,(timeEnd-timeBegin));
 
     return 0;
 }

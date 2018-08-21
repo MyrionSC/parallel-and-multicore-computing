@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 project(1A C)
 
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
 find_package(OpenMP)
 if (OPENMP_FOUND)
