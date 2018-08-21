@@ -6,7 +6,6 @@
 //#define PRINT_ALL_SECTION
 #define MAX 10000
 #define NOT_CONNECTED 9999
-#define MIN(a,b) ((a) < (b) ? a : b)
 
 // TODO Add multiple small test dataset with known solution that can be used to verify the functionality of the algorithm.
 // TODO Write a test script who compates the results of th algorithm with the test datasets.
@@ -62,13 +61,15 @@ int main(int argc, char *argv[]) {
     #endif
 
     /// Section 2: Floyd-Warshall
+    int *dik = &distance[0][0];
+    int *dij = &distance[0][0];
+    int chunkSize = nodesCount / maxNrThreads;
+
     /// Timing scope.
     double timeBegin, timeEnd;
     timeBegin = omp_get_wtime();
-    int *dik = &distance[0][0];
-    int *dij = &distance[0][0];
 
-    #pragma omp parallel for firstprivate(dik, dij) schedule(static)
+    #pragma omp parallel for firstprivate(dik, dij) schedule(static, chunkSize) num_threads(maxNrThreads)
     for (int k = 1; k <= nodesCount; ++k) {
         dik += k;
         for (int i = 1; i <= nodesCount; ++i) {
@@ -77,8 +78,9 @@ int main(int argc, char *argv[]) {
             int *dijTmp = dij;
 
             for (int j = 1; j <= nodesCount; ++j) {
-                dij++;
-                *dij = MIN(*dij, *dik + distance[k][j]);
+                ++dij;
+                if ((*dik + distance[k][j]) < *dij)
+                    *dij = *dik + distance[k][j];
             }
             dij = dijTmp;
         }
