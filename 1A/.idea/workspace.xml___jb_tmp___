@@ -45,20 +45,22 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="c" value="6244" />
-          <entry key="txt" value="527" />
+          <entry key="c___jb_tmp___" value="1" />
+          <entry key="txt" value="541" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CMakeLists.txt" value="15" />
           <entry key="Doxygen file" value="14" />
-          <entry key="ObjectiveC" value="6230" />
-          <entry key="PLAIN_TEXT" value="512" />
+          <entry key="ObjectiveC" value="6231" />
+          <entry key="PLAIN_TEXT" value="526" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="c" value="2" />
+          <entry key="c___jb_tmp___" value="1" />
           <entry key="cpp" value="2" />
           <entry key="txt" value="3" />
         </counts>
@@ -66,7 +68,7 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CMakeLists.txt" value="1" />
-          <entry key="ObjectiveC" value="4" />
+          <entry key="ObjectiveC" value="5" />
           <entry key="PLAIN_TEXT" value="2" />
         </counts>
       </usages-collector>
@@ -77,8 +79,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="78" column="51" selection-start-line="78" selection-start-column="51" selection-end-line="78" selection-end-column="51" />
+            <state relative-caret-position="-1113">
+              <caret line="16" column="18" lean-forward="true" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
                 <element signature="e#1546#1603#0" expanded="true" />
@@ -109,6 +111,7 @@
         <option value="$PROJECT_DIR$/dev/main.c" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/main.c" />
+        <option value="$PROJECT_DIR$/main.c___jb_tmp___" />
       </list>
     </option>
   </component>
@@ -141,6 +144,17 @@
               <item name="1A" type="b2602c69:ProjectViewProjectNode" />
               <item name="1A" type="462c0819:PsiDirectoryNode" />
               <item name="dev" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="1A" type="b2602c69:ProjectViewProjectNode" />
+              <item name="1A" type="462c0819:PsiDirectoryNode" />
+              <item name="spartan" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="1A" type="b2602c69:ProjectViewProjectNode" />
+              <item name="1A" type="462c0819:PsiDirectoryNode" />
+              <item name="spartan" type="462c0819:PsiDirectoryNode" />
+              <item name="results" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -218,7 +232,7 @@
       <workItem from="1534297178335" duration="3385000" />
       <workItem from="1534306108229" duration="16845000" />
       <workItem from="1534810577015" duration="357000" />
-      <workItem from="1534811076777" duration="1430000" />
+      <workItem from="1534811076777" duration="1934000" />
     </task>
     <task id="LOCAL-00001" summary="Solved read file pointer error.">
       <created>1533792974803</created>
@@ -262,11 +276,25 @@
       <option name="project" value="LOCAL" />
       <updated>1534812255886</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added printing sequence for admission.">
+      <created>1534812642949</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1534812642949</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Script files.">
+      <created>1534812932551</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1534812932551</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="46144000" />
+    <option name="totallyTimeSpent" value="46648000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -278,14 +306,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="974" height="1047" extended-state="0" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16958424" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17270789" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.40700218" visible="true" weight="0.33296824" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.40724948" visible="true" weight="0.329718" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4989339" weight="0.2624729" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -293,7 +321,7 @@
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Messages" order="8" sideWeight="0.41151386" weight="0.32092005" />
       <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4989339" weight="0.329718" />
-      <window_info active="true" anchor="bottom" id="Event Log" order="10" sideWeight="0.5929978" side_tool="true" visible="true" weight="0.33296824" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.59275055" side_tool="true" visible="true" weight="0.329718" />
       <window_info anchor="bottom" id="Version Control" order="11" sideWeight="0.4946695" weight="0.329718" />
       <window_info anchor="bottom" id="CMake" order="12" sideWeight="0.49946696" weight="0.3286334" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -351,7 +379,8 @@
     <MESSAGE value="Added parallel for one section 2 with collapse(2) and critical.&#10;Previous code gives unstable results." />
     <MESSAGE value="Changed algorithm implementation from array indices to 2 iterative pointers." />
     <MESSAGE value="Added printing sequence for admission." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added printing sequence for admission." />
+    <MESSAGE value="Script files." />
+    <option name="LAST_COMMIT_MESSAGE" value="Script files." />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/example-input.txt" />
@@ -374,10 +403,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main.c___jb_tmp___">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#18#37#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="78" column="51" selection-start-line="78" selection-start-column="51" selection-end-line="78" selection-end-column="51" />
+        <state relative-caret-position="-1113">
+          <caret line="16" column="18" lean-forward="true" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
             <element signature="e#1546#1603#0" expanded="true" />
