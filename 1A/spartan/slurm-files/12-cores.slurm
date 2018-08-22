@@ -2,7 +2,7 @@
 
 #SBATCH --partition=bigmem
 #SBATCH --output=output/12-cores.out
-#SBATCH --job-name="M&M-1A-twelve-cpu"
+#SBATCH --job-name="twelve-cpu"
 #SBATCH --time=0-12:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=12

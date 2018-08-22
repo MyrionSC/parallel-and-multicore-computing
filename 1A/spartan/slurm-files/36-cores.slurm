@@ -2,7 +2,7 @@
 
 #SBATCH --partition=bigmem
 #SBATCH --output=output/36-cores.out
-#SBATCH --job-name="M&M-1A-thirty-six-cpu"
+#SBATCH --job-name="thirty-six-cpu"
 #SBATCH --time=0-12:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=36

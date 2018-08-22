@@ -1,0 +1,24 @@
+ 
+ *** Eight cores *** 
+ 
+dataset: example-input
+Max threads: 8
+17 0.0004587329895002767
+real	0m0.830s
+user	0m0.715s
+sys	0m0.110s
+ 
+dataset: 1000e-10000v
+Max threads: 8
+413 0.781736445002025
+real	0m1.514s
+user	0m5.872s
+sys	0m0.099s
+ 
+dataset: 2000e-50000v
+Max threads: 8
+187 3.62871920800535
+real	0m4.254s
+user	0m28.607s
+sys	0m0.092s
+ 
