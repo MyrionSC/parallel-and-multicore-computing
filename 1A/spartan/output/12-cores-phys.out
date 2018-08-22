@@ -1,0 +1,24 @@
+ 
+ *** Twelve cores Physical ***
+ 
+dataset: example-input
+Max threads: 12
+17 0.0001879958435893059
+real	0m0.329s
+user	0m0.224s
+sys	0m0.067s
+ 
+dataset: 1000e-10000v
+Max threads: 12
+413 0.2034222516231239
+real	0m0.531s
+user	0m2.492s
+sys	0m0.068s
+ 
+dataset: 2000e-50000v
+Max threads: 12
+187 1.487531649880111
+real	0m1.888s
+user	0m17.327s
+sys	0m0.111s
+ 

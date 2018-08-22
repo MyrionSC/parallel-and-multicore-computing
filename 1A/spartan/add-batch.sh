@@ -1,3 +1,4 @@
+sbatch slurm-files/1-cores.slurm
 sbatch slurm-files/2-cores.slurm
 sbatch slurm-files/4-cores.slurm
 sbatch slurm-files/8-cores.slurm
