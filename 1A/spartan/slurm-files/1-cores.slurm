@@ -1,14 +1,13 @@
 #!/bin/bash
 
-#SBATCH --partition=bigmem
-#SBATCH --output=output/36-cores.out
-#SBATCH --job-name="M&M-1A-thirty-six-cpu"
+#SBATCH --output=output/01-cores.out
+#SBATCH --job-name="one-cpu"
 #SBATCH --time=0-12:00:00
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=36
+#SBATCH --ntasks-per-node=1
 
 echo " "
-echo " *** Thirty-six cores ***"
+echo " *** One Core ***"
 echo " "
 echo "dataset: example-input"
 time ./main input-files/example-input.txt
