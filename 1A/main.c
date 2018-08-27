@@ -109,6 +109,16 @@ int main(int argc, char *argv[]) {
         dik -= k + nodesCount * MAX;
     }
 
+    /// if there are no paths between two nodes, set these to -1 so it does not interfere with diameter calculation
+    #pragma omp parallel for
+    for (int i = 1; i <= nodesCount; ++i) {
+        for (int j = 1; j <= nodesCount; ++j) {
+            if (distance[i][j] == 9999)
+                distance[i][j] = -1;
+        }
+    }
+
+
     int diameter=-1;
 
     /// Section 3: look for the most distant pair
