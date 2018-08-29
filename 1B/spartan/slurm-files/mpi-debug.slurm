@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#SBATCH --output=2n-1c.out
-#SBATCH --job-name="2n-1c"
+#SBATCH --output=mpi-debug.out
+#SBATCH --job-name="mpi-debug"
 #SBATCH --time=0-12:00:00
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
@@ -11,16 +11,16 @@
 module load OpenMPI/1.10.2-GCC-4.6.4
 
 echo " "
-echo " *** Two Nodes, 1 Core Per Node ***"
+echo " *** mpi-debug ***"
 echo " "
 
-mpicc ../mpi-helloworld.c -o mpi-hw
+mpicc ../mpi-debug.c -o mpi-debug
 
 echo "running 1:"
-mpirun ./mpi-hw
+mpirun ./mpi-debug
 
 echo "running 2:"
-mpirun ./mpi-hw
+mpirun ./mpi-debug
 
 echo " "
 

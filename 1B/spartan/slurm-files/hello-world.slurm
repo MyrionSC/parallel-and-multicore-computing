@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#SBATCH --output=2n-1c.out
-#SBATCH --job-name="2n-1c"
+#SBATCH --output=output/hello-world.out
+#SBATCH --job-name="hello-world"
 #SBATCH --time=0-12:00:00
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
@@ -11,7 +11,7 @@
 module load OpenMPI/1.10.2-GCC-4.6.4
 
 echo " "
-echo " *** Two Nodes, 1 Core Per Node ***"
+echo " *** Hello World ***"
 echo " "
 
 mpicc ../mpi-helloworld.c -o mpi-hw
