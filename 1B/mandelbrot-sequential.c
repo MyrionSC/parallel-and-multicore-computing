@@ -1,6 +1,5 @@
-
-#include <cstdio>
-#include <cstdlib>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 // return 1 if in set, 0 otherwise
@@ -46,7 +45,7 @@ int main(int argc, char *argv[]){
 		sscanf(argv[region*6+3],"%lf",&img_lower);
 		sscanf(argv[region*6+4],"%lf",&img_upper);
 		sscanf(argv[region*6+5],"%i",&num);
-		sscanf(argv[region*6+6],"%i",&maxiter);		
+		sscanf(argv[region*6+6],"%i",&maxiter);
 		printf("%d\n",mandelbrotSetCount(real_lower,real_upper,img_lower,img_upper,num,maxiter));
 	}
 	return EXIT_SUCCESS;
