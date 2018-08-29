@@ -1,8 +1,12 @@
 to use on spartan:
 
-copy main.c into folder
-run compile-options.sh
-run add-batch.sh
-run gather-output.sh when all jobs are done
-view output.txt
+
+
+
+example program arguments
+-2.0 1.0 -1.0 1.0 100 10000 -1 1.0 0.0 1.0 100 10000
+
+should output:
+2538
+3509
 

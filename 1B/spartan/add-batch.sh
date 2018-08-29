@@ -1,9 +1,8 @@
-sbatch slurm-files/1-cores.slurm
-sbatch slurm-files/2-cores.slurm
-sbatch slurm-files/4-cores.slurm
-sbatch slurm-files/8-cores.slurm
-sbatch slurm-files/12-cores.slurm
-sbatch slurm-files/12-cores-phys.slurm
-sbatch slurm-files/16-cores.slurm
-sbatch slurm-files/32-cores.slurm
-sbatch slurm-files/64-cores.slurm
+#!/bin/bash
+FILES=slurm-files/*
+for F in $FILES
+do
+  sbatch $F
+  #echo "Processing $F file..."
+  #cat $F
+done
