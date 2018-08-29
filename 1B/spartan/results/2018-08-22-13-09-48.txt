@@ -1,0 +1,75 @@
+execution date: 2018-08-22-13-09-48
+*******
+ 
+ 
+ *** two cores ***
+ 
+dataset: example-input
+Max threads: 2
+17 0.0001375447027385235
+real	0m0.775s
+user	0m0.596s
+sys	0m0.173s
+ 
+dataset: 1000e-10000v
+Max threads: 2
+413 2.463568697217852
+real	0m3.229s
+user	0m5.315s
+sys	0m0.122s
+ 
+dataset: 2000e-50000v
+Max threads: 2
+187 13.36225190991536
+real	0m13.870s
+user	0m25.875s
+sys	0m0.105s
+ 
+ 
+ *** Four cores ***
+ 
+dataset: example-input
+Max threads: 4
+17 0.01640907628461719
+real	0m1.009s
+user	0m0.821s
+sys	0m0.192s
+ 
+dataset: 1000e-10000v
+Max threads: 4
+413 1.466272598132491
+real	0m2.303s
+user	0m6.359s
+sys	0m0.088s
+ 
+dataset: 2000e-50000v
+Max threads: 4
+187 11.20416457112879
+real	0m12.180s
+user	0m44.263s
+sys	0m0.089s
+ 
+ 
+ *** Eight cores *** 
+ 
+dataset: example-input
+Max threads: 8
+17 0.0004587329895002767
+real	0m0.830s
+user	0m0.715s
+sys	0m0.110s
+ 
+dataset: 1000e-10000v
+Max threads: 8
+413 0.781736445002025
+real	0m1.514s
+user	0m5.872s
+sys	0m0.099s
+ 
+dataset: 2000e-50000v
+Max threads: 8
+187 3.62871920800535
+real	0m4.254s
+user	0m28.607s
+sys	0m0.092s
+ 
