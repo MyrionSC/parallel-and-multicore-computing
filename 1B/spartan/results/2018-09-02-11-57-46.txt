@@ -1,0 +1,55 @@
+execution date: 2018-09-02-11-57-46
+*******
+ 
+ 
+ *** Two Nodes, 1 Core Per Node ***
+ 
+running 1:
+Hello world from process 0 of 2
+Hello world from process 1 of 2
+running 2:
+Hello world from process 0 of 2
+Hello world from process 1 of 2
+ 
+ 
+ *** Hello World - 2 nodes, 2 cores each ***
+ 
+running 1:
+: Hello world from process 0 of 4
+: Hello world from process 1 of 4
+: Hello world from process 2 of 4
+: Hello world from process 3 of 4
+running 2:
+: Hello world from process 0 of 4
+: Hello world from process 1 of 4
+: Hello world from process 2 of 4
+: Hello world from process 3 of 4
+ 
+ 
+ *** mpi-debug ***
+ 
+running 1:
+I am the root 0 process of the group (total 2).
+processor 0  sent 1729
+I am a subsidiary process 1 of the group (total 2).
+processor 1  received 1729
+running 2:
+I am the root 0 process of the group (total 2).
+processor 0  sent 1729
+I am a subsidiary process 1 of the group (total 2).
+processor 1  received 1729
+ 
+ 
+ *** sendrecv ***
+ 
+running 1:
+I am the root 0 process of the group (total 2).
+processor 0  sent 1729
+I am a subsidiary process 1 of the group (total 2).
+processor 1  received 1729
+running 2:
+I am the root 0 process of the group (total 2).
+processor 0  sent 1729
+I am a subsidiary process 1 of the group (total 2).
+processor 1  received 1729
+ 
