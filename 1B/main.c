@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "omp.h"
+#include "mpi.h"
 
 // return 1 if in set, 0 otherwise
 int inset(double real, double img, int maxiter){
@@ -31,6 +32,14 @@ int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, d
 
 // main
 int main(int argc, char *argv[]){
+    int size, rank, nameLenght = 0;
+    char procName[MPI_MAX_PROCESSOR_NAME];
+    MPI_Init(NULL, NULL);
+	MPI_Comm_size(MPI_COMM_WORLD, &size);
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	MPI_Get_processor_name(procName, &nameLenght);
+    printf("Processor %s, rank %d out of %d processors\n", procName, rank, size);
+
 	double real_lower;
 	double real_upper;
 	double img_lower;
@@ -38,6 +47,7 @@ int main(int argc, char *argv[]){
 	int num;
 	int maxiter;
 	int num_regions = (argc-1)/6;
+
 	for(int region=0;region<num_regions;region++){
 		// scan the arguments
 		sscanf(argv[region*6+1],"%lf",&real_lower);
@@ -48,5 +58,8 @@ int main(int argc, char *argv[]){
 		sscanf(argv[region*6+6],"%i",&maxiter);		
 		printf("%d\n",mandelbrotSetCount(real_lower,real_upper,img_lower,img_upper,num,maxiter));
 	}
+
+	MPI_Finalize();
+
 	return EXIT_SUCCESS;
 }

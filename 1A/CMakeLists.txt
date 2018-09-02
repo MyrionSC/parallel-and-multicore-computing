@@ -14,6 +14,8 @@ endif()
 add_executable(1A main.c)
 
 
+find_package(MPI REQUIRED)
+
 # cmake for floyd-warshall
 #cmake_minimum_required(VERSION 3.12)
 #project(1A)
