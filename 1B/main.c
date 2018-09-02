@@ -22,9 +22,18 @@ int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, d
 	int count=0;
 	double real_step = (real_upper-real_lower)/num;
 	double img_step = (img_upper-img_lower)/num;
-	for(int real=0; real<num; real++){
-		for(int img=0; img<num; img++){
-			count+=inset(real_lower+real*real_step,img_lower+img*img_step,maxiter);
+
+	/// OpenMP
+    int maxNrThreads = omp_get_max_threads();
+    printf("Max cores: %d\n", maxNrThreads);
+
+    /// Set number of threads.
+    omp_set_num_threads(maxNrThreads);
+
+    #pragma parallel for collapse(2)
+	for(int real = 0; real < num; ++real){
+		for(int img = 0; img < num; ++img){
+			count += inset(real_lower + real * real_step, img_lower + img * img_step, maxiter);
 		}
 	}
 	return count;
@@ -32,14 +41,6 @@ int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, d
 
 // main
 int main(int argc, char *argv[]){
-    int size, rank, nameLenght = 0;
-    char procName[MPI_MAX_PROCESSOR_NAME];
-    MPI_Init(NULL, NULL);
-	MPI_Comm_size(MPI_COMM_WORLD, &size);
-	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-	MPI_Get_processor_name(procName, &nameLenght);
-    printf("Processor %s, rank %d out of %d processors\n", procName, rank, size);
-
 	double real_lower;
 	double real_upper;
 	double img_lower;
@@ -47,19 +48,46 @@ int main(int argc, char *argv[]){
 	int num;
 	int maxiter;
 	int num_regions = (argc-1)/6;
+//	printf("Number of regions: %d\n", num_regions);
 
-	for(int region=0;region<num_regions;region++){
-		// scan the arguments
-		sscanf(argv[region*6+1],"%lf",&real_lower);
-		sscanf(argv[region*6+2],"%lf",&real_upper);
-		sscanf(argv[region*6+3],"%lf",&img_lower);
-		sscanf(argv[region*6+4],"%lf",&img_upper);
-		sscanf(argv[region*6+5],"%i",&num);
-		sscanf(argv[region*6+6],"%i",&maxiter);		
-		printf("%d\n",mandelbrotSetCount(real_lower,real_upper,img_lower,img_upper,num,maxiter));
+    /// OpenMPI
+    int nrProc, idProc, nameLenght = 0;
+    char nameNode[MPI_MAX_PROCESSOR_NAME];
+    MPI_Init(NULL, NULL);
+    MPI_Comm_size(MPI_COMM_WORLD, &nrProc);
+    MPI_Comm_rank(MPI_COMM_WORLD, &idProc);
+    MPI_Get_processor_name(nameNode, &nameLenght);
+    printf("Node: %s, processor id: %d out of: %d proccesors\n", nameNode, idProc, nrProc);
+
+
+
+    /// Timing scope.
+	double timeBegin, timeEnd;
+    if (idProc == 0) {
+		timeBegin = omp_get_wtime();
 	}
 
+	for(int region=0;region<num_regions;region++){
+		if (idProc == region) {
+			printf("Processor id: %d\t",idProc);
+			sscanf(argv[region*6+1],"%lf",&real_lower);
+			sscanf(argv[region*6+2],"%lf",&real_upper);
+			sscanf(argv[region*6+3],"%lf",&img_lower);
+			sscanf(argv[region*6+4],"%lf",&img_upper);
+			sscanf(argv[region*6+5],"%i",&num);
+			sscanf(argv[region*6+6],"%i",&maxiter);
+			printf("%d\n",mandelbrotSetCount(real_lower,real_upper,img_lower,img_upper,num,maxiter));
+		}
+	}
+
+	///
 	MPI_Finalize();
+
+    /// Print execution time.
+	if (idProc == 0) {
+		timeEnd = omp_get_wtime();
+		printf("%.16g\n", (timeEnd - timeBegin));
+	}
 
 	return EXIT_SUCCESS;
 }
