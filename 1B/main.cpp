@@ -1,7 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <algorithm>
+#include <string.h>
+#include <list>
+#include <vector>
+#include <string>
 #include "omp.h"
 #include "mpi.h"
+
+#define MAX_CORES_PER_NODE 64
 
 // return 1 if in set, 0 otherwise
 int inset(double real, double img, int maxiter){
@@ -25,7 +32,7 @@ int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, d
 
 	/// OpenMP
     int maxNrThreads = omp_get_max_threads();
-    printf("Max cores: %d\n", maxNrThreads);
+//    printf("Max cores: %d\n", maxNrThreads);
 
     /// Set number of threads.
     omp_set_num_threads(maxNrThreads);
@@ -52,26 +59,48 @@ int main(int argc, char *argv[]){
 
     /// OpenMPI
     int nrProc, idProc, nameLenght = 0;
-    char nameNode[MPI_MAX_PROCESSOR_NAME];
+    char nameNode[MPI_MAX_PROCESSOR_NAME] = {0};
     MPI_Init(NULL, NULL);
     MPI_Comm_size(MPI_COMM_WORLD, &nrProc);
     MPI_Comm_rank(MPI_COMM_WORLD, &idProc);
     MPI_Get_processor_name(nameNode, &nameLenght);
-    printf("Node: %s, processor id: %d out of: %d proccesors\n", nameNode, idProc, nrProc);
 
-    int *allIdProc = malloc(nrProc * sizeof(int));
-    char *allNameNode = malloc(nrProc * sizeof(nameNode));
+	int *allIdProc = (int*)calloc(nrProc, sizeof(int));
+	char *allNameNode = (char*)calloc(nrProc, sizeof(nameNode));
+	MPI_Gather(nameNode, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, allNameNode, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, 0, MPI_COMM_WORLD);
+	MPI_Gather(&idProc, 1, MPI_INT, allIdProc, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-    MPI_Gather(nameNode, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, allNameNode, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, 0, MPI_COMM_WORLD);
-    MPI_Gather(&idProc, 1, MPI_INT, allIdProc, 1, MPI_INT, 0, MPI_COMM_WORLD);
-
+    /// Index nodes and cores.
     if (idProc == 0) {
-        for (int i = 0; i < nrProc; ++i) {
-            printf("node: %s: id: %d\n", &allNameNode[i*MPI_MAX_PROCESSOR_NAME], allIdProc[i]);
-        }
+
+		std::vector<std::string> nodeNames;
+		std::vector<int> nodeCores;
+
+		for (int i = 0; i < nrProc; ++i) {
+			nodeNames.push_back(std::string(&allNameNode[i * MPI_MAX_PROCESSOR_NAME]));
+			if (!nodeNames.empty()) {
+				nodeCores.push_back(allIdProc[i]);
+			}
+		}
+
+		auto tmp = nodeNames;
+		std::sort(nodeNames.begin(), nodeNames.end());
+		auto lastIter = std::unique(nodeNames.begin(), nodeNames.end());
+		nodeNames.erase(lastIter, nodeNames.end());
+
+		std::vector<std::vector<int>> setCores;
+		for (int i = 0; i < nodeNames.size(); ++i) {
+			std::cout << "Node: " << nodeNames.at(i) << "Cores:";
+			setCores.push_back(std::vector<int>());
+			for (int j = 0; j < tmp.size(); ++j) {
+				if (nodeNames.at(i).compare(tmp.at(j)) == 0) {
+					setCores.at(i).push_back(nodeCores.at(j));
+					std::cout << " " << setCores[i][j];
+				}
+			}
+			std::cout << std::endl;
+		}
     }
-
-
 
     /// Timing scope.
 	double timeBegin, timeEnd;
@@ -81,7 +110,7 @@ int main(int argc, char *argv[]){
 
 	for(int region=0;region<num_regions;region++){
 		if (idProc == region) {
-			printf("Processor id: %d\t",idProc);
+//			printf("Processor id: %d\t",idProc);
 			sscanf(argv[region*6+1],"%lf",&real_lower);
 			sscanf(argv[region*6+2],"%lf",&real_upper);
 			sscanf(argv[region*6+3],"%lf",&img_lower);
@@ -94,6 +123,10 @@ int main(int argc, char *argv[]){
 
 	///
 	MPI_Finalize();
+
+	/// Destruct dynamically allocated memory.
+	free(allIdProc);
+    free(allNameNode);
 
     /// Print execution time.
 	if (idProc == 0) {
