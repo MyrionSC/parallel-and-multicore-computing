@@ -30,7 +30,7 @@ int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, d
     /// Set number of threads.
     omp_set_num_threads(maxNrThreads);
 
-    #pragma parallel for collapse(2)
+    #pragma omp parallel for collapse(2)
 	for(int real = 0; real < num; ++real){
 		for(int img = 0; img < num; ++img){
 			count += inset(real_lower + real * real_step, img_lower + img * img_step, maxiter);
