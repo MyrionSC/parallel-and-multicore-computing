@@ -59,6 +59,18 @@ int main(int argc, char *argv[]){
     MPI_Get_processor_name(nameNode, &nameLenght);
     printf("Node: %s, processor id: %d out of: %d proccesors\n", nameNode, idProc, nrProc);
 
+    int *allIdProc = malloc(nrProc * sizeof(int));
+    char *allNameNode = malloc(nrProc * sizeof(nameNode));
+
+    MPI_Gather(nameNode, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, allNameNode, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, 0, MPI_COMM_WORLD);
+    MPI_Gather(&idProc, 1, MPI_INT, allIdProc, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+    if (idProc == 0) {
+        for (int i = 0; i < nrProc; ++i) {
+            printf("node: %s: id: %d\n", &allNameNode[i*MPI_MAX_PROCESSOR_NAME], allIdProc[i]);
+        }
+    }
+
 
 
     /// Timing scope.
