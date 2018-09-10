@@ -12,10 +12,10 @@
 module load OpenMPI/1.10.2-GCC-6.2.0
 
 echo " "
-echo " *** Two Nodes, 1 Core Per Node ***"
+echo " *** Two Nodes, 5 Cores ***"
 echo " "
 
-mpicc -fopenmp ../main.c -o main
+mpic++ -fopenmp ../main.cpp -o main
 
 echo "running 1:"
 mpirun ./main -2.0 1.0 -1.0 1.0 100 10000 -1 1.0 0.0 1.0 100 10000
