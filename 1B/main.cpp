@@ -25,32 +25,10 @@ int inset(double real, double img, int maxiter){
 	return 1;
 }
 
-// count the number of points in the set, within the region
-int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, double img_upper, int num, int maxiter){
-	int count=0;
-	double real_step = (real_upper-real_lower)/num;
-	double img_step = (img_upper-img_lower)/num;
-
-	/// OpenMP
-//    int maxNrThreads = omp_get_max_threads();
-//    printf("Max cores: %d\n", maxNrThreads);
-
-    /// Set number of threads.
-//    omp_set_num_threads(maxNrThreads);
-
-//    #pragma omp parallel for collapse(2)
-	for(int real = 0; real < num; ++real){
-		for(int img = 0; img < num; ++img){
-			count += inset(real_lower + real * real_step, img_lower + img * img_step, maxiter);
-		}
-	}
-	return count;
-}
-
 void mandelbrotSetCount(double real_lower, double real_upper, double img_lower, double img_upper, int num, int maxiter, int idProcces, int nrProccesses){
     double real_step = (real_upper-real_lower)/num;
     double img_step = (img_upper-img_lower)/num;
-    int result = 0, count = 0;
+    int count[1] = {0};
 
     int chunkSize = num / nrProccesses;
     if (chunkSize == 0) { // if there are more processors than number of loop iterations
@@ -63,31 +41,35 @@ void mandelbrotSetCount(double real_lower, double real_upper, double img_lower, 
         real_end = num;
     }
 
-    if (idProcces == 0) {
-        printf("chunksize: %d\n", chunkSize);
-        printf("nrOfProcs: %d\n", nrProccesses);
-    }
+//    if (idProcces == 0) {
+//        printf("chunksize: %d\n", chunkSize);
+//        printf("nrOfProcs: %d\n", nrProccesses);
+//    }
+//    printf("procid: %d, count: %d\n", idProcces, count[0]);
 
-//    printf("procid: %d, real: %d, real_end: %d\n", idProcces, real, real_end);
 
     for(; real < real_end; ++real){
         for(int img = 0; img < num; ++img){
-            count += inset(real_lower + real * real_step, img_lower + img * img_step, maxiter);
+            count[0] += inset(real_lower + real * real_step, img_lower + img * img_step, maxiter);
         }
     }
-    printf("procid: %d, count: %d\n", idProcces, count);
 
-    /// MPI Gather the all the counts into result
-
-
-
-    /// have processor with id 0 print the result
+    /// MPI Gather all the counts to proc 0
+    int* resultsbuffer = NULL;
     if (idProcces == 0) {
-        printf("result: %d\n", result);
+        resultsbuffer = (int*)malloc(sizeof(int) * nrProccesses);
     }
+    MPI_Gather( count, 1, MPI_INT, resultsbuffer, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-
-    return;
+    if (idProcces == 0) {
+        int result = 0;
+        for (int i = 0; i < nrProccesses; i++) {
+//            printf("count: %d\n", resultsbuffer[i]);
+            result += resultsbuffer[i];
+        }
+        printf("result: %d\n", result);
+        free(resultsbuffer);
+    }
 }
 
 // main
@@ -115,19 +97,9 @@ int main(int argc, char *argv[]){
         sscanf(argv[region*6+5],"%i",&num);
         sscanf(argv[region*6+6],"%i",&maxiter);
         mandelbrotSetCount(real_lower,real_upper,img_lower,img_upper,num,maxiter, idProcces, nrProccesses);
-
-        MPI_Barrier(MPI_COMM_WORLD); // todo: remove later
-        if (idProcces == 0) {
-            printf("Barrier!\n");
-        }
     }
 
-	///
 	MPI_Finalize();
-
-	/// Destruct dynamically allocated memory.
-//	free(allProcessIds);
-//    free(allNodeNames);
 
 	return EXIT_SUCCESS;
 }
