@@ -9,7 +9,7 @@
 #include "omp.h"
 #include "mpi.h"
 
-#define DEBUG
+//#define DEBUG
 
 // return 1 if in set, 0 otherwise
 int inset(double real, double img, int maxiter){
@@ -26,25 +26,18 @@ int inset(double real, double img, int maxiter){
 }
 
 // count the number of points in the set, within the region
-int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, double img_upper, int num, int maxiter){
+int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, double img_upper, int num, int maxiter, int idProcess, int nrProcesses){
 	int count=0;
 	double real_step = (real_upper-real_lower)/num;
 	double img_step = (img_upper-img_lower)/num;
 
-	/// OpenMP
-//    int maxNrThreads = omp_get_max_threads();
-//    printf("Max cores: %d\n", maxNrThreads);
+    for (int real = 0; real < num; real += nrProcesses) {
+        for (int img = 0; img < num; ++img) {
+            count += inset(real_lower + (real + idProcess) * real_step, img_lower + img * img_step, maxiter);
+        }
+    }
 
-    /// Set number of threads.
-//    omp_set_num_threads(maxNrThreads);
-
-//    #pragma omp parallel for collapse(2)
-	for(int real = 0; real < num; ++real){
-		for(int img = 0; img < num; ++img){
-			count += inset(real_lower + real * real_step, img_lower + img * img_step, maxiter);
-		}
-	}
-	return count;
+    return count;
 }
 
 // main
@@ -56,31 +49,32 @@ int main(int argc, char *argv[]){
 	int num;
 	int maxiter;
 	int nrRegions = (argc-1)/6;
-//	printf("Number of regions: %d\n", nrRegions);
 
     /// OpenMPI
-    int nrProccesses, idProcces, nameLenght = 0;
+    int root = 0;
+    int nrProcesses, idProcces, nameLenght = 0;
     char nameNode[MPI_MAX_PROCESSOR_NAME] = {0};
     MPI_Init(NULL, NULL);
-    MPI_Comm_size(MPI_COMM_WORLD, &nrProccesses);
+    MPI_Comm_size(MPI_COMM_WORLD, &nrProcesses);
     MPI_Comm_rank(MPI_COMM_WORLD, &idProcces);
     MPI_Get_processor_name(nameNode, &nameLenght);
 
-	int *allProcessIds = (int*)calloc(nrProccesses, sizeof(int));
-	char *allNodeNames = (char*)calloc(nrProccesses, sizeof(nameNode));
-	MPI_Gather(nameNode, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, allNodeNames, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, 0, MPI_COMM_WORLD);
-	MPI_Gather(&idProcces, 1, MPI_INT, allProcessIds, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	int *allProcessIds = (int*)calloc(nrProcesses, sizeof(int));
+	char *allNodeNames = (char*)calloc(nrProcesses, sizeof(nameNode));
+	MPI_Gather(nameNode, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, allNodeNames, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, root, MPI_COMM_WORLD);
+	MPI_Gather(&idProcces, 1, MPI_INT, allProcessIds, 1, MPI_INT, root, MPI_COMM_WORLD);
 
+#ifdef DEBUG
     /// Index nodes and cores.
     std::vector<std::string> vNodeNames;
     std::vector<std::vector<int>> vNodeProcesses;
     std::vector<int> vNodeIds;
 
-    /// Only executed by master core!
-    if (idProcces == 0) {
+    /// Only executed by root process!
+    if (idProcces == root) {
         std::vector<int> allProcesses;
 
-		for (int i = 0; i < nrProccesses; ++i) {
+		for (int i = 0; i < nrProcesses; ++i) {
 			vNodeNames.push_back(std::string(&allNodeNames[i * MPI_MAX_PROCESSOR_NAME]));
 			if (!vNodeNames.empty()) {
                 allProcesses.push_back(allProcessIds[i]);
@@ -104,10 +98,7 @@ int main(int argc, char *argv[]){
         }
     }
 
-#ifdef DEBUG
-//    std::cout << "Nr Nodes: " << nrNodes << std::endl;
-//    std::cout << "Max thread: " << omp_get_max_threads() << std::endl;
-    if (idProcces == 0) {
+    if (idProcces == root) {
         for (int k = 0; k < vNodeIds.size(); ++k) {
             std::cout << "Node: " << vNodeIds.at(k) << "\t" << "Max thread: " << omp_get_max_threads() << "\t" << "Processes: ";
             for (int i = 0; i < vNodeProcesses.at(k).size(); ++i) {
@@ -118,21 +109,23 @@ int main(int argc, char *argv[]){
     }
 #endif
 
-    /// Wait for all cores.
+    /// Wait for all processes.
     MPI_Barrier(MPI_COMM_WORLD);
 
-    for(int region=0;region<nrRegions;region++) {
-        if (idProcces == 0) {
-			printf("Processor id: %d\t",idProcces);
-			sscanf(argv[region*6+1],"%lf",&real_lower);
-			sscanf(argv[region*6+2],"%lf",&real_upper);
-			sscanf(argv[region*6+3],"%lf",&img_lower);
-			sscanf(argv[region*6+4],"%lf",&img_upper);
-			sscanf(argv[region*6+5],"%i",&num);
-			sscanf(argv[region*6+6],"%i",&maxiter);
-			printf("Result %d\n", mandelbrotSetCount(real_lower,real_upper,img_lower,img_upper,num,maxiter));
-//			2538, 3508
-		}
+    for(int region=0; region<nrRegions; region++) {
+        sscanf(argv[region*6+1],"%lf",&real_lower);
+        sscanf(argv[region*6+2],"%lf",&real_upper);
+        sscanf(argv[region*6+3],"%lf",&img_lower);
+        sscanf(argv[region*6+4],"%lf",&img_upper);
+        sscanf(argv[region*6+5],"%i",&num);
+        sscanf(argv[region*6+6],"%i",&maxiter);
+        int localCount = mandelbrotSetCount(real_lower, real_upper, img_lower, img_upper, num, maxiter, idProcces, nrProcesses);
+        int globalCount = 0;
+        MPI_Reduce(&localCount, &globalCount,1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+        /// Root prints result.
+        if (idProcces == root)
+            printf("Result %d\n", globalCount);
 	}
 
 	///
