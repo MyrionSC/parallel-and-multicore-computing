@@ -67,7 +67,7 @@ void mandelbrotSetCount(double real_lower, double real_upper, double img_lower, 
 //            printf("count: %d\n", resultsbuffer[i]);
             result += resultsbuffer[i];
         }
-        printf("result: %d\n", result);
+        printf("%d\n", result);
         free(resultsbuffer);
     }
 }
