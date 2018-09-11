@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#SBATCH --output=output/2n-1c.out
-#SBATCH --job-name="2n-1c"
+#SBATCH --output=output/4n-8c.out
+#SBATCH --job-name="4n-8c"
 #SBATCH --time=0-12:00:00
 #SBATCH --nodes=4
 #SBATCH --ntasks=8 
@@ -12,10 +12,10 @@
 module load OpenMPI/1.10.2-GCC-6.2.0
 
 echo " "
-echo " *** 4 Nodes, 2 Core Per Node ***"
+echo " *** 4 Nodes, 8 Cores ***"
 echo " "
 
-mpicc -fopenmp ../main.c -o main
+mpic++ -fopenmp ../main.cpp -o main
 
 echo "Program output:"
 mpirun ./main -2.0 1.0 -1.0 1.0 100 10000 -1 1.0 0.0 1.0 100 10000
