@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.12)
-project(1B C)
+project(1B)
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS_RELEASE "-O2")
-set(CMAKE_C_COMPILER mpicc)
+set(CMAKE_CXX_COMPILER mpic++)
 
 find_package(OpenMP)
 if (OPENMP_FOUND)
@@ -12,6 +12,5 @@ if (OPENMP_FOUND)
     set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
 
-add_executable(mpi_helloworld mpi-helloworld.c)
-add_executable(1B main.c)
-add_executable(mandelbrot-sequential mandelbrot-sequential.c)
+add_executable(1B-par main.cpp)
+add_executable(1B-seq mandelbrot-sequential.cpp)
