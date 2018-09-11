@@ -51,22 +51,31 @@ void mandelbrotSetCount(double real_lower, double real_upper, double img_lower, 
     double real_step = (real_upper-real_lower)/num;
     double img_step = (img_upper-img_lower)/num;
     int result = 0, count = 0;
+
     int chunkSize = num / nrProccesses;
+    if (chunkSize == 0) { // if there are more processors than number of loop iterations
+        chunkSize = 1;
+    }
 
-    printf("procid: %d, nrOfProcs: %d\n", idProcces, nrProccesses);
+    int real = idProcces * chunkSize;
+    int real_end = idProcces * chunkSize + chunkSize;
+    if (idProcces == nrProccesses-1) { // to make pretty sure that nothing has been missed
+        real_end = num;
+    }
 
+    if (idProcces == 0) {
+        printf("chunksize: %d\n", chunkSize);
+        printf("nrOfProcs: %d\n", nrProccesses);
+    }
 
-    //    int nrProccesses, idProcces, nameLenght = 0;
+//    printf("procid: %d, real: %d, real_end: %d\n", idProcces, real, real_end);
 
-
-    /// MPI Scatter realStart and realEnd such that each processor has about the same number
-
-//    int count=0;
-//    for(int real = 0; real < num; ++real){
-//        for(int img = 0; img < num; ++img){
-//            count += inset(real_lower + real * real_step, img_lower + img * img_step, maxiter);
-//        }
-//    }
+    for(; real < real_end; ++real){
+        for(int img = 0; img < num; ++img){
+            count += inset(real_lower + real * real_step, img_lower + img * img_step, maxiter);
+        }
+    }
+    printf("procid: %d, count: %d\n", idProcces, count);
 
     /// MPI Gather the all the counts into result
 
