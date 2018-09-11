@@ -15,12 +15,15 @@
 int inset(double real, double img, int maxiter){
 	double z_real = real;
 	double z_img = img;
+    double z2_real;
+    double z2_img;
+
 	for(int iters = 0; iters < maxiter; iters++){
-		double z2_real = z_real*z_real-z_img*z_img;
-		double z2_img = 2.0*z_real*z_img;
+		z2_real = z_real * z_real - z_img * z_img;
+        z2_img = 2.0 * z_real * z_img;
 		z_real = z2_real + real;
 		z_img = z2_img + img;
-		if(z_real*z_real + z_img*z_img > 4.0) return 0;
+		if(z_real * z_real + z_img * z_img > 4.0) return 0;
 	}
 	return 1;
 }
@@ -32,8 +35,16 @@ int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, d
 	double img_step = (img_upper-img_lower)/num;
 
     for (int real = 0; real < num; real += nrProcesses) {
-        for (int img = 0; img < num; ++img) {
-            count += inset(real_lower + (real + idProcess) * real_step, img_lower + img * img_step, maxiter);
+
+        /// Precalculation.
+        double tmpReal = real_lower + (real + idProcess) * real_step;
+
+        /// Unrolling
+        for (int img = 0; img < num; img += 4) {
+            count += inset(tmpReal, img_lower + img * img_step, maxiter);
+            count += inset(tmpReal, img_lower + (img + 1) * img_step, maxiter);
+            count += inset(tmpReal, img_lower + (img + 2) * img_step, maxiter);
+            count += inset(tmpReal, img_lower + (img + 3) * img_step, maxiter);
         }
     }
 
