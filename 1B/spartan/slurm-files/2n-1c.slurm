@@ -9,8 +9,7 @@
 
 # we use this version because it is the one that is installed on linux when using apt
 # If we just run module load OpenMPI we get version 3
-module load GCC/6.2.0
-module load OpenMPI/1.10.2-GCC-6.2.0
+module load OpenMPI/2.1.2-GCC-6.4.0-2.28
 
 echo " "
 echo " *** Two Nodes, 5 Cores ***"

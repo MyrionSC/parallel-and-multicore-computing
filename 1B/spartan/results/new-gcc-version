@@ -1,0 +1,83 @@
+execution date: 2018-09-12-12-49-17
+*******
+ 
+ 
+ *** 16 Tasks ***
+ 
+Program output:
+Result 2538
+Result 3508
+Result 86677
+Result 1
+Result 2878
+Result 528
+Result 0
+Result 3785
+Result 9280
+Result 9250
+Result 2742
+Result 126536
+Result 113486
+
+real	0m7.525s
+user	0m12.085s
+sys	0m6.198s
+ 
+ 
+ *** Two Nodes, 5 Cores ***
+ 
+Program output:
+Result 2538
+Result 3508
+Result 86677
+Result 1
+Result 2497
+Result 528
+Result 0
+Result 3785
+Result 9280
+Result 9250
+Result 2742
+Result 122717
+Result 113486
+
+real	0m8.652s
+user	0m15.924s
+sys	0m0.714s
+ 
+ 
+ *** 4 Nodes, 8 Cores ***
+ 
+Program output:
+./main: error while loading shared libraries: libosmcomp.so.3: cannot open shared object file: No such file or directory
+-------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code.. Per user-direction, the job has been aborted.
+-------------------------------------------------------
+
+real	0m0.712s
+user	0m0.038s
+sys	0m0.064s
+ 
+ 
+ *** Sequential ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m35.578s
+user	0m35.558s
+sys	0m0.005s
+ 
