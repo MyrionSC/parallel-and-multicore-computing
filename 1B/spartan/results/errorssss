@@ -1,0 +1,97 @@
+execution date: 2018-09-12-12-40-21
+*******
+ 
+ 
+ *** 16 Tasks ***
+ 
+Program output:
+-------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code.. Per user-direction, the job has been aborted.
+-------------------------------------------------------
+./main: error while loading shared libraries: libosmcomp.so.3: cannot open shared object file: No such file or directory
+./main: error while loading shared libraries: libosmcomp.so.3: cannot open shared object file: No such file or directory
+./main: error while loading shared libraries: libosmcomp.so.3: cannot open shared object file: No such file or directory
+./main: error while loading shared libraries: libosmcomp.so.3: cannot open shared object file: No such file or directory
+./main: error while loading shared libraries: libosmcomp.so.3: cannot open shared object file: No such file or directory
+./main: error while loading shared libraries: libosmcomp.so.3: cannot open shared object file: No such file or directory
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[4121,1],10]
+  Exit code:    127
+--------------------------------------------------------------------------
+
+real	0m1.826s
+user	0m0.111s
+sys	0m0.101s
+ 
+ 
+ *** Two Nodes, 5 Cores ***
+ 
+Program output:
+Result 2538
+Result 3508
+Result 86677
+Result 1
+Result 2497
+Result 528
+Result 0
+Result 3785
+Result 9280
+Result 9250
+Result 2742
+Result 122717
+Result 113486
+
+real	0m9.225s
+user	0m16.794s
+sys	0m0.626s
+ 
+ 
+ *** 4 Nodes, 8 Cores ***
+ 
+Program output:
+--------------------------------------------------------------------------
+Open MPI tried to fork a new process via the "execve" system call but
+failed.  Open MPI checks many things before attempting to launch a
+child process, but nothing is perfect. This error may be indicative
+of another problem on the target host, or even something as silly as
+having specified a directory for your application. Your job will now
+abort.
+
+  Local host:        spartan-rc007
+  Application name:  ./main
+  Error:             Exec format error
+--------------------------------------------------------------------------
+[spartan-rc007.hpc.unimelb.edu.au:21867] 7 more processes have sent help message help-orte-odls-default.txt / execve error
+[spartan-rc007.hpc.unimelb.edu.au:21867] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+4 total processes failed to start
+
+real	0m0.892s
+user	0m0.047s
+sys	0m0.053s
+ 
+ 
+ *** Sequential ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m39.674s
+user	0m39.437s
+sys	0m0.027s
+ 
