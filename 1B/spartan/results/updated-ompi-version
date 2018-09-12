@@ -1,0 +1,91 @@
+execution date: 2018-09-12-13-02-46
+*******
+ 
+ 
+ *** 16 Tasks ***
+ 
+Program output:
+Result 2538
+Result 3508
+Result 86677
+Result 1
+Result 2878
+Result 528
+Result 0
+Result 3785
+Result 9280
+Result 9250
+Result 2742
+Result 126536
+Result 113486
+
+real	0m8.516s
+user	0m12.567s
+sys	0m6.145s
+ 
+ 
+ *** Two Nodes, 5 Cores ***
+ 
+Program output:
+Result 2538
+Result 3508
+Result 86677
+Result 1
+Result 2497
+Result 528
+Result 0
+Result 3785
+Result 9280
+Result 9250
+Result 2742
+Result 122717
+Result 113486
+
+real	0m9.227s
+user	0m16.368s
+sys	0m0.496s
+ 
+ 
+ *** 4 Nodes, 8 Cores ***
+ 
+Program output:
+Result 2538
+Result 3508
+Result 86677
+Result 1
+Result 2627
+Result 528
+Result 0
+Result 3785
+Result 9280
+Result 9250
+Result 2742
+Result 123986
+Result 113486
+
+real	0m7.425s
+user	0m5.399s
+sys	0m0.914s
+ 
+ 
+ *** Sequential ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m35.844s
+user	0m35.824s
+sys	0m0.005s
+ 
