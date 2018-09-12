@@ -6,33 +6,31 @@
 #include <array>
 #include <vector>
 #include <string>
-//#include "omp.h"
 #include "mpi.h"
 
-//#define DEBUG
-
 // count the number of points in the set, within the region
-int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, double img_upper, int num, int maxiter, int idProcess, int nrProcesses){
+int mandelbrotSetCount(double realLower, double realUpper, double imgLower, double imgUpper, int num, int maxiter, int idProcess, int nrProcesses){
 	int count=0;
-	double real_step = (real_upper - real_lower) / num;
-	double img_step = (img_upper - img_lower) / num;
+	double realStep = (realUpper - realLower) / num;
+	double img_step = (imgUpper - imgLower) / num;
+    double tmpReal, tmpImg, zReal, zImg, z2Real, z2Img = 0.0;
 
     for (int real = 0; real < num; real += nrProcesses) {
         /// Precalculation.
-        double tmpReal = real_lower + (real + idProcess) * real_step;
+        tmpReal = realLower + (real + idProcess) * realStep;
         for (int img = 0; img < num; ++img) {
-            double tmpImg = img_lower + img * img_step;
-            double z_real = tmpReal;
-            double z_img = tmpImg;
-            double z2_real, z2_img;
+            tmpImg = imgLower + img * img_step;
+            zReal = tmpReal;
+            zImg = tmpImg;
+            z2Real = z2Img = 0.0;
 
             for(int iters = 0; iters < maxiter; iters++){
-                z2_real = z_real * z_real - z_img * z_img;
-                z2_img = 2.0 * z_real * z_img;
-                z_real = z2_real + tmpReal;
-                z_img = z2_img + tmpImg;
+                z2Real = zReal * zReal - zImg * zImg;
+                z2Img = 2.0 * zReal * zImg;
+                zReal = z2Real + tmpReal;
+                zImg = z2Img + tmpImg;
 
-                if(z_real * z_real + z_img * z_img > 4.0)
+                if(zReal * zReal + zImg * zImg > 4.0)
                     goto break1;
             }
             count++;
@@ -66,51 +64,6 @@ int main(int argc, char *argv[]){
 	char *allNodeNames = (char*)calloc(nrProcesses, sizeof(nameNode));
 	MPI_Gather(nameNode, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, allNodeNames, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, root, MPI_COMM_WORLD);
 	MPI_Gather(&idProcces, 1, MPI_INT, allProcessIds, 1, MPI_INT, root, MPI_COMM_WORLD);
-
-#ifdef DEBUG
-    /// Index nodes and cores.
-    std::vector<std::string> vNodeNames;
-    std::vector<std::vector<int>> vNodeProcesses;
-    std::vector<int> vNodeIds;
-
-    /// Only executed by root process!
-    if (idProcces == root) {
-        std::vector<int> allProcesses;
-
-		for (int i = 0; i < nrProcesses; ++i) {
-			vNodeNames.push_back(std::string(&allNodeNames[i * MPI_MAX_PROCESSOR_NAME]));
-			if (!vNodeNames.empty()) {
-                allProcesses.push_back(allProcessIds[i]);
-			}
-		}
-
-		auto tmp = vNodeNames;
-		std::sort(vNodeNames.begin(), vNodeNames.end());
-		auto lastIter = std::unique(vNodeNames.begin(), vNodeNames.end());
-		vNodeNames.erase(lastIter, vNodeNames.end());
-
-		for (int i = 0; i < vNodeNames.size(); ++i) {
-            vNodeIds.push_back(i);
-            vNodeProcesses.push_back(std::vector<int>());
-            std::vector<int> setCores;
-            for (int j = 0; j < tmp.size(); ++j) {
-                if (vNodeNames.at(i).compare(tmp.at(j)) == 0) {
-                    vNodeProcesses.at(i).push_back(allProcesses.at(j));
-                }
-            }
-        }
-    }
-
-    if (idProcces == root) {
-        for (int k = 0; k < vNodeIds.size(); ++k) {
-            std::cout << "Node: " << vNodeIds.at(k) << "\t" << "Max thread: " << omp_get_max_threads() << "\t" << "Processes: ";
-            for (int i = 0; i < vNodeProcesses.at(k).size(); ++i) {
-                std::cout << " " << vNodeProcesses[k][i];
-            }
-            std::cout << std::endl;
-        }
-    }
-#endif
 
     for(int region=0; region<nrRegions; region++) {
         if (idProcces == root) {
