@@ -53,36 +53,18 @@ int main(int argc, char *argv[]){
 
     /// OpenMPI
     int root = 0;
-    int nrProcesses, idProcces, nameLenght = 0;
-    char nameNode[MPI_MAX_PROCESSOR_NAME] = {0};
+    int nrProcesses, idProcces;
     MPI_Init(NULL, NULL);
     MPI_Comm_size(MPI_COMM_WORLD, &nrProcesses);
     MPI_Comm_rank(MPI_COMM_WORLD, &idProcces);
-    MPI_Get_processor_name(nameNode, &nameLenght);
-
-	int *allProcessIds = (int*)calloc(nrProcesses, sizeof(int));
-	char *allNodeNames = (char*)calloc(nrProcesses, sizeof(nameNode));
-	MPI_Gather(nameNode, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, allNodeNames, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, root, MPI_COMM_WORLD);
-	MPI_Gather(&idProcces, 1, MPI_INT, allProcessIds, 1, MPI_INT, root, MPI_COMM_WORLD);
 
     for(int region=0; region<nrRegions; region++) {
-        if (idProcces == root) {
-            sscanf(argv[region * 6 + 1], "%lf", &real_lower);
-            sscanf(argv[region * 6 + 2], "%lf", &real_upper);
-            sscanf(argv[region * 6 + 3], "%lf", &img_lower);
-            sscanf(argv[region * 6 + 4], "%lf", &img_upper);
-            sscanf(argv[region * 6 + 5], "%i", &num);
-            sscanf(argv[region * 6 + 6], "%i", &maxIter);
-        }
-
-        ///
-        MPI_Bcast(&real_lower, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
-        MPI_Bcast(&real_upper, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
-        MPI_Bcast(&img_lower, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
-        MPI_Bcast(&img_upper, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
-        MPI_Bcast(&num, 1, MPI_INT, root, MPI_COMM_WORLD);
-        MPI_Bcast(&maxIter, 1, MPI_INT, root, MPI_COMM_WORLD);
-
+        sscanf(argv[region * 6 + 1], "%lf", &real_lower);
+        sscanf(argv[region * 6 + 2], "%lf", &real_upper);
+        sscanf(argv[region * 6 + 3], "%lf", &img_lower);
+        sscanf(argv[region * 6 + 4], "%lf", &img_upper);
+        sscanf(argv[region * 6 + 5], "%i", &num);
+        sscanf(argv[region * 6 + 6], "%i", &maxIter);
 
         int localCount = mandelbrotSetCount(real_lower, real_upper, img_lower, img_upper, num, maxIter, idProcces, nrProcesses);
         int globalCount = 0;
@@ -90,15 +72,11 @@ int main(int argc, char *argv[]){
 
         /// Root prints result.
         if (idProcces == root)
-            printf("Result %d\n", globalCount);
+            printf("%d\n", globalCount);
 	}
 
 	///
 	MPI_Finalize();
-
-	/// Destruct dynamically allocated memory.
-	free(allProcessIds);
-    free(allNodeNames);
 
 	return EXIT_SUCCESS;
 }
