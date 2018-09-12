@@ -6,28 +6,10 @@
 #include <array>
 #include <vector>
 #include <string>
-#include "omp.h"
+//#include "omp.h"
 #include "mpi.h"
 
 //#define DEBUG
-
-// return 1 if in set, 0 otherwise
-int inset(double real, double img, int maxiter){
-	double z_real = real;
-	double z_img = img;
-    double z2_real;
-    double z2_img;
-
-	for(int iters = 0; iters < maxiter; iters++){
-		z2_real = z_real * z_real - z_img * z_img;
-        z2_img = 2.0 * z_real * z_img;
-		z_real = z2_real + real;
-		z_img = z2_img + img;
-
-		if(z_real * z_real + z_img * z_img > 4.0) return 0;
-	}
-	return 1;
-}
 
 // count the number of points in the set, within the region
 int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, double img_upper, int num, int maxiter, int idProcess, int nrProcesses){
@@ -36,11 +18,25 @@ int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, d
 	double img_step = (img_upper - img_lower) / num;
 
     for (int real = 0; real < num; real += nrProcesses) {
-
         /// Precalculation.
         double tmpReal = real_lower + (real + idProcess) * real_step;
         for (int img = 0; img < num; ++img) {
-            count += inset(tmpReal, img_lower + img * img_step, maxiter);
+            double tmpImg = img_lower + img * img_step;
+            double z_real = tmpReal;
+            double z_img = tmpImg;
+            double z2_real, z2_img;
+
+            for(int iters = 0; iters < maxiter; iters++){
+                z2_real = z_real * z_real - z_img * z_img;
+                z2_img = 2.0 * z_real * z_img;
+                z_real = z2_real + tmpReal;
+                z_img = z2_img + tmpImg;
+
+                if(z_real * z_real + z_img * z_img > 4.0)
+                    goto break1;
+            }
+            count++;
+            break1:;
         }
     }
 
@@ -54,7 +50,7 @@ int main(int argc, char *argv[]){
 	double img_lower;
 	double img_upper;
 	int num;
-	int maxiter;
+	int maxIter;
 	int nrRegions = (argc-1)/6;
 
     /// OpenMPI
@@ -123,7 +119,7 @@ int main(int argc, char *argv[]){
             sscanf(argv[region * 6 + 3], "%lf", &img_lower);
             sscanf(argv[region * 6 + 4], "%lf", &img_upper);
             sscanf(argv[region * 6 + 5], "%i", &num);
-            sscanf(argv[region * 6 + 6], "%i", &maxiter);
+            sscanf(argv[region * 6 + 6], "%i", &maxIter);
         }
 
         ///
@@ -132,10 +128,10 @@ int main(int argc, char *argv[]){
         MPI_Bcast(&img_lower, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
         MPI_Bcast(&img_upper, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
         MPI_Bcast(&num, 1, MPI_INT, root, MPI_COMM_WORLD);
-        MPI_Bcast(&maxiter, 1, MPI_INT, root, MPI_COMM_WORLD);
+        MPI_Bcast(&maxIter, 1, MPI_INT, root, MPI_COMM_WORLD);
 
 
-        int localCount = mandelbrotSetCount(real_lower, real_upper, img_lower, img_upper, num, maxiter, idProcces, nrProcesses);
+        int localCount = mandelbrotSetCount(real_lower, real_upper, img_lower, img_upper, num, maxIter, idProcces, nrProcesses);
         int globalCount = 0;
         MPI_Reduce(&localCount, &globalCount,1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
