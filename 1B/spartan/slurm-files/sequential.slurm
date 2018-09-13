@@ -2,10 +2,12 @@
 
 #SBATCH --array=0-10
 #SBATCH --partition=physical
-#SBATCH --output=output/sequential.out
+#SBATCH --output=output/sequential-run-%a.out
 #SBATCH --job-name="sequential"
 #SBATCH --time=0-12:00:00
 #SBATCH --ntasks=1
+
+module load GCC
 
 echo " "
 echo " *** Sequential, run $SLURM_ARRAY_TASK_ID ***"
