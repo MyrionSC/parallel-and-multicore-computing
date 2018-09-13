@@ -8,24 +8,12 @@
 #include <string>
 #include "mpi.h"
 
-
-int inset(double real, double img, int maxiter){
-    double z_real = real;
-    double z_img = img;
-    for(int iters = 0; iters < maxiter; iters++){
-        double z2_real = z_real*z_real-z_img*z_img;
-        double z2_img = 2.0*z_real*z_img;
-        z_real = z2_real + real;
-        z_img = z2_img + img;
-        if(z_real*z_real + z_img*z_img > 4.0) return 0;
-    }
-    return 1;
-}
-
 // count the number of points in the set, within the region
-int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, double img_upper, int num, int maxiter, int idProcess, int nrProcesses){
-	double real_step = (real_upper - real_lower) / num;
-	double img_step = (img_upper - img_lower) / num;
+int mandelbrotSetCount(double realLower, double realUpper, double imgLower, double imgUpper, int num, int maxiter, int idProcess, int nrProcesses){
+    int count=0;
+    double realStep = (realUpper - realLower) / num;
+    double img_step = (imgUpper - imgLower) / num;
+    double tmpReal, tmpImg, zReal, zImg, z2Real, z2Img = 0.0;
 
     int chunk = 1;
     int rest = 0;
@@ -45,27 +33,16 @@ int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, d
             zImg = tmpImg;
             z2Real = z2Img = 0.0;
 
-    int real = idProcess * chunkSize;
-    int real_end = idProcess * chunkSize + chunkSize;
-    if (idProcess == nrProcesses-1) { // to make pretty sure that nothing has been missed
-        real_end = num;
-    }
-
-    for(; real < real_end; ++real){
-        for (int img = 0; img < num; ++img) {
-            double tmp_img = img_lower + img * img_step;
-            double tmp_real = real_lower + real * real_step;
-            double z_real = tmp_real;
-            double z_img = tmp_img;
             for(int iters = 0; iters < maxiter; iters++){
-                double z2_real = z_real*z_real-z_img*z_img;
-                double z2_img = 2.0*z_real*z_img;
-                z_real = z2_real + tmp_real;
-                z_img = z2_img + tmp_img;
-                if(z_real*z_real + z_img*z_img > 4.0)
+                z2Real = zReal * zReal - zImg * zImg;
+                z2Img = 2.0 * zReal * zImg;
+                zReal = z2Real + tmpReal;
+                zImg = z2Img + tmpImg;
+
+                if(zReal * zReal + zImg * zImg > 4.0)
                     goto break1;
             }
-            local_count++;
+            count++;
             break1:;
         }
     }
@@ -99,34 +76,62 @@ int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, d
 
 // main
 int main(int argc, char *argv[]){
-	double real_lower;
-	double real_upper;
-	double img_lower;
-	double img_upper;
-	int num;
-	int maxIter;
-	int nrRegions = (argc-1)/6;
+    double real_lower;
+    double real_upper;
+    double img_lower;
+    double img_upper;
+    int num;
+    int maxIter;
+    int nrRegions = (argc-1)/6;
 
     /// OpenMPI
     int root = 0;
-    int nrProcesses, idProcess;
+    int nrProcesses, idProcces, nameLenght = 0;
+    char nameNode[MPI_MAX_PROCESSOR_NAME] = {0};
     MPI_Init(NULL, NULL);
     MPI_Comm_size(MPI_COMM_WORLD, &nrProcesses);
-    MPI_Comm_rank(MPI_COMM_WORLD, &idProcess);
+    MPI_Comm_rank(MPI_COMM_WORLD, &idProcces);
+    MPI_Get_processor_name(nameNode, &nameLenght);
+
+    int *allProcessIds = (int*)calloc(nrProcesses, sizeof(int));
+    char *allNodeNames = (char*)calloc(nrProcesses, sizeof(nameNode));
+    MPI_Gather(nameNode, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, allNodeNames, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, root, MPI_COMM_WORLD);
+    MPI_Gather(&idProcces, 1, MPI_INT, allProcessIds, 1, MPI_INT, root, MPI_COMM_WORLD);
 
     for(int region=0; region<nrRegions; region++) {
-        sscanf(argv[region * 6 + 1], "%lf", &real_lower);
-        sscanf(argv[region * 6 + 2], "%lf", &real_upper);
-        sscanf(argv[region * 6 + 3], "%lf", &img_lower);
-        sscanf(argv[region * 6 + 4], "%lf", &img_upper);
-        sscanf(argv[region * 6 + 5], "%i", &num);
-        sscanf(argv[region * 6 + 6], "%i", &maxIter);
+        if (idProcces == root) {
+            sscanf(argv[region * 6 + 1], "%lf", &real_lower);
+            sscanf(argv[region * 6 + 2], "%lf", &real_upper);
+            sscanf(argv[region * 6 + 3], "%lf", &img_lower);
+            sscanf(argv[region * 6 + 4], "%lf", &img_upper);
+            sscanf(argv[region * 6 + 5], "%i", &num);
+            sscanf(argv[region * 6 + 6], "%i", &maxIter);
+        }
 
-        mandelbrotSetCount(real_lower, real_upper, img_lower, img_upper, num, maxIter, idProcess, nrProcesses);
+        ///
+        MPI_Bcast(&real_lower, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
+        MPI_Bcast(&real_upper, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
+        MPI_Bcast(&img_lower, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
+        MPI_Bcast(&img_upper, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
+        MPI_Bcast(&num, 1, MPI_INT, root, MPI_COMM_WORLD);
+        MPI_Bcast(&maxIter, 1, MPI_INT, root, MPI_COMM_WORLD);
+
+
+        int localCount = mandelbrotSetCount(real_lower, real_upper, img_lower, img_upper, num, maxIter, idProcces, nrProcesses);
+        int globalCount = 0;
+        MPI_Reduce(&localCount, &globalCount,1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+        /// Root prints result.
+        if (idProcces == root)
+            printf("Result %d\n", globalCount);
     }
 
-	///
-	MPI_Finalize();
+    ///
+    MPI_Finalize();
 
-	return EXIT_SUCCESS;
+    /// Destruct dynamically allocated memory.
+    free(allProcessIds);
+    free(allNodeNames);
+
+    return EXIT_SUCCESS;
 }
