@@ -27,11 +27,23 @@ int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, d
 	double real_step = (real_upper - real_lower) / num;
 	double img_step = (img_upper - img_lower) / num;
 
-    int local_count = 0;
-    int chunkSize = num / nrProcesses;
-    if (chunkSize == 0) { // if there are more processors than number of loop iterations
-        chunkSize = 1;
+    int chunk = 1;
+    int rest = 0;
+
+    if (nrProcesses < num) {
+        chunk = num / nrProcesses;
+        rest = num % nrProcesses;
     }
+
+
+    for (int real = 0; real < (chunk * nrProcesses); real += nrProcesses) {
+        /// Precalculation.
+        tmpReal = realLower + (real + idProcess) * realStep;
+        for (int img = 0; img < num; ++img) {
+            tmpImg = imgLower + img * img_step;
+            zReal = tmpReal;
+            zImg = tmpImg;
+            z2Real = z2Img = 0.0;
 
     int real = idProcess * chunkSize;
     int real_end = idProcess * chunkSize + chunkSize;
@@ -58,13 +70,31 @@ int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, d
         }
     }
 
-    int global_count = 0;
-    MPI_Reduce(&local_count, &global_count,1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    for (int real = 0; real < rest; ++real) {
+        /// Precalculation.
+        tmpReal = realLower + real * realStep;
+        for (int img = 0; img < num; ++img) {
+            tmpImg = imgLower + img * img_step;
+            zReal = tmpReal;
+            zImg = tmpImg;
+            z2Real = z2Img = 0.0;
 
-    /// print result
-    if (idProcess == 0) {
-        printf("%d\n", global_count);
+            for(int iters = 0; iters < maxiter; iters++){
+                z2Real = zReal * zReal - zImg * zImg;
+                z2Img = 2.0 * zReal * zImg;
+                zReal = z2Real + tmpReal;
+                zImg = z2Img + tmpImg;
+
+                if(zReal * zReal + zImg * zImg > 4.0)
+                    goto break2;
+            }
+            count++;
+            break2:;
+        }
     }
+
+
+    return count;
 }
 
 // main
