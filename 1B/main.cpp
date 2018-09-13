@@ -8,37 +8,63 @@
 #include <string>
 #include "mpi.h"
 
+
+int inset(double real, double img, int maxiter){
+    double z_real = real;
+    double z_img = img;
+    for(int iters = 0; iters < maxiter; iters++){
+        double z2_real = z_real*z_real-z_img*z_img;
+        double z2_img = 2.0*z_real*z_img;
+        z_real = z2_real + real;
+        z_img = z2_img + img;
+        if(z_real*z_real + z_img*z_img > 4.0) return 0;
+    }
+    return 1;
+}
+
 // count the number of points in the set, within the region
-int mandelbrotSetCount(double realLower, double realUpper, double imgLower, double imgUpper, int num, int maxiter, int idProcess, int nrProcesses){
-	int count=0;
-	double realStep = (realUpper - realLower) / num;
-	double img_step = (imgUpper - imgLower) / num;
-    double tmpReal, tmpImg, zReal, zImg, z2Real, z2Img = 0.0;
+int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, double img_upper, int num, int maxiter, int idProcess, int nrProcesses){
+	double real_step = (real_upper - real_lower) / num;
+	double img_step = (img_upper - img_lower) / num;
 
-    for (int real = 0; real < num; real += nrProcesses) {
-        /// Precalculation.
-        tmpReal = realLower + (real + idProcess) * realStep;
+    int local_count = 0;
+    int chunkSize = num / nrProcesses;
+    if (chunkSize == 0) { // if there are more processors than number of loop iterations
+        chunkSize = 1;
+    }
+
+    int real = idProcess * chunkSize;
+    int real_end = idProcess * chunkSize + chunkSize;
+    if (idProcess == nrProcesses-1) { // to make pretty sure that nothing has been missed
+        real_end = num;
+    }
+
+    for(; real < real_end; ++real){
         for (int img = 0; img < num; ++img) {
-            tmpImg = imgLower + img * img_step;
-            zReal = tmpReal;
-            zImg = tmpImg;
-            z2Real = z2Img = 0.0;
-
+            double tmp_img = img_lower + img * img_step;
+            double tmp_real = real_lower + real * real_step;
+            double z_real = tmp_real;
+            double z_img = tmp_img;
             for(int iters = 0; iters < maxiter; iters++){
-                z2Real = zReal * zReal - zImg * zImg;
-                z2Img = 2.0 * zReal * zImg;
-                zReal = z2Real + tmpReal;
-                zImg = z2Img + tmpImg;
-
-                if(zReal * zReal + zImg * zImg > 4.0)
+                double z2_real = z_real*z_real-z_img*z_img;
+                double z2_img = 2.0*z_real*z_img;
+                z_real = z2_real + tmp_real;
+                z_img = z2_img + tmp_img;
+                if(z_real*z_real + z_img*z_img > 4.0)
                     goto break1;
             }
-            count++;
+            local_count++;
             break1:;
         }
     }
 
-    return count;
+    int global_count = 0;
+    MPI_Reduce(&local_count, &global_count,1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    /// print result
+    if (idProcess == 0) {
+        printf("%d\n", global_count);
+    }
 }
 
 // main
@@ -53,10 +79,10 @@ int main(int argc, char *argv[]){
 
     /// OpenMPI
     int root = 0;
-    int nrProcesses, idProcces;
+    int nrProcesses, idProcess;
     MPI_Init(NULL, NULL);
     MPI_Comm_size(MPI_COMM_WORLD, &nrProcesses);
-    MPI_Comm_rank(MPI_COMM_WORLD, &idProcces);
+    MPI_Comm_rank(MPI_COMM_WORLD, &idProcess);
 
     for(int region=0; region<nrRegions; region++) {
         sscanf(argv[region * 6 + 1], "%lf", &real_lower);
@@ -66,14 +92,8 @@ int main(int argc, char *argv[]){
         sscanf(argv[region * 6 + 5], "%i", &num);
         sscanf(argv[region * 6 + 6], "%i", &maxIter);
 
-        int localCount = mandelbrotSetCount(real_lower, real_upper, img_lower, img_upper, num, maxIter, idProcces, nrProcesses);
-        int globalCount = 0;
-        MPI_Reduce(&localCount, &globalCount,1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-
-        /// Root prints result.
-        if (idProcces == root)
-            printf("%d\n", globalCount);
-	}
+        mandelbrotSetCount(real_lower, real_upper, img_lower, img_upper, num, maxIter, idProcess, nrProcesses);
+    }
 
 	///
 	MPI_Finalize();
