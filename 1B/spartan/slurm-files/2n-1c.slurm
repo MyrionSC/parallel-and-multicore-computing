@@ -15,7 +15,7 @@ echo " "
 echo " *** Two Nodes, 5 Cores ***"
 echo " "
 
-mpic++ -fopenmp -std=c++11 ../main.cpp -o main
+mpic++  -std=c++11 ../main.cpp -o main
 
 echo "Program output:"
 #mpirun ./main -2.0 1.0 -1.0 1.0 100 10000 -1 1.0 0.0 1.0 100 10000

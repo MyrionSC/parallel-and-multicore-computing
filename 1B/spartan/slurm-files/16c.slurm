@@ -13,7 +13,7 @@ module load OpenMPI/2.1.2-GCC-6.4.0-2.28
 echo " "
 echo " *** 16 Tasks ***"
 echo " "
-mpic++ -fopenmp -std=c++11 ../main.cpp -o main
+mpic++ -std=c++11 ../main.cpp -o main
 
 echo "Program output:"
 #mpirun ./main -2.0 1.0 -1.0 1.0 100 10000 -1 1.0 0.0 1.0 100 10000
