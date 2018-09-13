@@ -6,41 +6,65 @@
 #include <array>
 #include <vector>
 #include <string>
-//#include "omp.h"
 #include "mpi.h"
 
-//#define DEBUG
+
+int inset(double real, double img, int maxiter){
+    double z_real = real;
+    double z_img = img;
+    for(int iters = 0; iters < maxiter; iters++){
+        double z2_real = z_real*z_real-z_img*z_img;
+        double z2_img = 2.0*z_real*z_img;
+        z_real = z2_real + real;
+        z_img = z2_img + img;
+        if(z_real*z_real + z_img*z_img > 4.0) return 0;
+    }
+    return 1;
+}
 
 // count the number of points in the set, within the region
 int mandelbrotSetCount(double real_lower, double real_upper, double img_lower, double img_upper, int num, int maxiter, int idProcess, int nrProcesses){
-	int count=0;
 	double real_step = (real_upper - real_lower) / num;
 	double img_step = (img_upper - img_lower) / num;
 
-    for (int real = 0; real < num; real += nrProcesses) {
-        /// Precalculation.
-        double tmpReal = real_lower + (real + idProcess) * real_step;
+    int local_count = 0;
+    int chunkSize = num / nrProcesses;
+    if (chunkSize == 0) { // if there are more processors than number of loop iterations
+        chunkSize = 1;
+    }
+
+    int real = idProcess * chunkSize;
+    int real_end = idProcess * chunkSize + chunkSize;
+    if (idProcess == nrProcesses-1) { // to make pretty sure that nothing has been missed
+        real_end = num;
+    }
+
+    for(; real < real_end; ++real){
         for (int img = 0; img < num; ++img) {
-            double tmpImg = img_lower + img * img_step;
-            double z_real = tmpReal;
-            double z_img = tmpImg;
-            double z2_real, z2_img;
-
+            double tmp_img = img_lower + img * img_step;
+            double tmp_real = real_lower + real * real_step;
+            double z_real = tmp_real;
+            double z_img = tmp_img;
             for(int iters = 0; iters < maxiter; iters++){
-                z2_real = z_real * z_real - z_img * z_img;
-                z2_img = 2.0 * z_real * z_img;
-                z_real = z2_real + tmpReal;
-                z_img = z2_img + tmpImg;
-
-                if(z_real * z_real + z_img * z_img > 4.0)
+                double z2_real = z_real*z_real-z_img*z_img;
+                double z2_img = 2.0*z_real*z_img;
+                z_real = z2_real + tmp_real;
+                z_img = z2_img + tmp_img;
+                if(z_real*z_real + z_img*z_img > 4.0)
                     goto break1;
             }
-            count++;
+            local_count++;
             break1:;
         }
     }
 
-    return count;
+    int global_count = 0;
+    MPI_Reduce(&local_count, &global_count,1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    /// print result
+    if (idProcess == 0) {
+        printf("%d\n", global_count);
+    }
 }
 
 // main
@@ -55,97 +79,24 @@ int main(int argc, char *argv[]){
 
     /// OpenMPI
     int root = 0;
-    int nrProcesses, idProcces, nameLenght = 0;
-    char nameNode[MPI_MAX_PROCESSOR_NAME] = {0};
+    int nrProcesses, idProcess;
     MPI_Init(NULL, NULL);
     MPI_Comm_size(MPI_COMM_WORLD, &nrProcesses);
-    MPI_Comm_rank(MPI_COMM_WORLD, &idProcces);
-    MPI_Get_processor_name(nameNode, &nameLenght);
-
-	int *allProcessIds = (int*)calloc(nrProcesses, sizeof(int));
-	char *allNodeNames = (char*)calloc(nrProcesses, sizeof(nameNode));
-	MPI_Gather(nameNode, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, allNodeNames, MPI_MAX_PROCESSOR_NAME, MPI_CHAR, root, MPI_COMM_WORLD);
-	MPI_Gather(&idProcces, 1, MPI_INT, allProcessIds, 1, MPI_INT, root, MPI_COMM_WORLD);
-
-#ifdef DEBUG
-    /// Index nodes and cores.
-    std::vector<std::string> vNodeNames;
-    std::vector<std::vector<int>> vNodeProcesses;
-    std::vector<int> vNodeIds;
-
-    /// Only executed by root process!
-    if (idProcces == root) {
-        std::vector<int> allProcesses;
-
-		for (int i = 0; i < nrProcesses; ++i) {
-			vNodeNames.push_back(std::string(&allNodeNames[i * MPI_MAX_PROCESSOR_NAME]));
-			if (!vNodeNames.empty()) {
-                allProcesses.push_back(allProcessIds[i]);
-			}
-		}
-
-		auto tmp = vNodeNames;
-		std::sort(vNodeNames.begin(), vNodeNames.end());
-		auto lastIter = std::unique(vNodeNames.begin(), vNodeNames.end());
-		vNodeNames.erase(lastIter, vNodeNames.end());
-
-		for (int i = 0; i < vNodeNames.size(); ++i) {
-            vNodeIds.push_back(i);
-            vNodeProcesses.push_back(std::vector<int>());
-            std::vector<int> setCores;
-            for (int j = 0; j < tmp.size(); ++j) {
-                if (vNodeNames.at(i).compare(tmp.at(j)) == 0) {
-                    vNodeProcesses.at(i).push_back(allProcesses.at(j));
-                }
-            }
-        }
-    }
-
-    if (idProcces == root) {
-        for (int k = 0; k < vNodeIds.size(); ++k) {
-            std::cout << "Node: " << vNodeIds.at(k) << "\t" << "Max thread: " << omp_get_max_threads() << "\t" << "Processes: ";
-            for (int i = 0; i < vNodeProcesses.at(k).size(); ++i) {
-                std::cout << " " << vNodeProcesses[k][i];
-            }
-            std::cout << std::endl;
-        }
-    }
-#endif
+    MPI_Comm_rank(MPI_COMM_WORLD, &idProcess);
 
     for(int region=0; region<nrRegions; region++) {
-        if (idProcces == root) {
-            sscanf(argv[region * 6 + 1], "%lf", &real_lower);
-            sscanf(argv[region * 6 + 2], "%lf", &real_upper);
-            sscanf(argv[region * 6 + 3], "%lf", &img_lower);
-            sscanf(argv[region * 6 + 4], "%lf", &img_upper);
-            sscanf(argv[region * 6 + 5], "%i", &num);
-            sscanf(argv[region * 6 + 6], "%i", &maxIter);
-        }
+        sscanf(argv[region * 6 + 1], "%lf", &real_lower);
+        sscanf(argv[region * 6 + 2], "%lf", &real_upper);
+        sscanf(argv[region * 6 + 3], "%lf", &img_lower);
+        sscanf(argv[region * 6 + 4], "%lf", &img_upper);
+        sscanf(argv[region * 6 + 5], "%i", &num);
+        sscanf(argv[region * 6 + 6], "%i", &maxIter);
 
-        ///
-        MPI_Bcast(&real_lower, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
-        MPI_Bcast(&real_upper, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
-        MPI_Bcast(&img_lower, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
-        MPI_Bcast(&img_upper, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
-        MPI_Bcast(&num, 1, MPI_INT, root, MPI_COMM_WORLD);
-        MPI_Bcast(&maxIter, 1, MPI_INT, root, MPI_COMM_WORLD);
-
-
-        int localCount = mandelbrotSetCount(real_lower, real_upper, img_lower, img_upper, num, maxIter, idProcces, nrProcesses);
-        int globalCount = 0;
-        MPI_Reduce(&localCount, &globalCount,1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-
-        /// Root prints result.
-        if (idProcces == root)
-            printf("Result %d\n", globalCount);
-	}
+        mandelbrotSetCount(real_lower, real_upper, img_lower, img_upper, num, maxIter, idProcess, nrProcesses);
+    }
 
 	///
 	MPI_Finalize();
-
-	/// Destruct dynamically allocated memory.
-	free(allProcessIds);
-    free(allNodeNames);
 
 	return EXIT_SUCCESS;
 }
