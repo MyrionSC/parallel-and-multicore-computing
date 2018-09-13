@@ -1,0 +1,92 @@
+execution date: 2018-09-13-12-55-47
+*******
+ 
+ 
+ *** 16 Tasks ***
+ 
+Program output:
+Result 2538
+Result 3508
+Result 86677
+Result 1
+Result 2497
+Result 528
+Result 0
+Result 3785
+Result 9280
+Result 9250
+Result 2742
+Result 122717
+Result 113486
+
+real	0m3.390s
+user	0m3.798s
+sys	0m0.545s
+ 
+ 
+ *** Two Nodes, 5 Cores ***
+ 
+Program output:
+Result 2538
+Result 3508
+Result 86677
+Result 1
+Result 2497
+Result 528
+Result 0
+Result 3785
+Result 9280
+Result 9250
+Result 2742
+Result 122717
+Result 113486
+
+real	0m6.235s
+user	0m21.278s
+sys	0m0.085s
+ 
+ 
+ *** 4 Nodes, 8 Cores ***
+ 
+Program output:
+Result 2538
+Result 3508
+Result 86677
+Result 1
+Result 2497
+Result 528
+Result 0
+Result 3785
+Result 9280
+Result 9250
+Result 2742
+Result 122717
+Result 113486
+
+real	0m4.142s
+user	0m3.450s
+sys	0m0.088s
+ 
+ 
+ *** Sequential ***
+ 
+/var/spool/slurm/job4993808/slurm_script: line 13: g++: command not found
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m33.228s
+user	0m33.215s
+sys	0m0.000s
+ 
