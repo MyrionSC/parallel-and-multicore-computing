@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#SBATCH --partition=physical
 #SBATCH --output=output/2n-1c.out
 #SBATCH --job-name="2n-1c"
 #SBATCH --time=0-12:00:00

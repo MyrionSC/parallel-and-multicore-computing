@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#SBATCH --partition=physical
 #SBATCH --output=output/16c.out
 #SBATCH --job-name="16c"
 #SBATCH --time=0-12:00:00

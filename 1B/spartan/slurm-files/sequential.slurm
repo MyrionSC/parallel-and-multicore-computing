@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#SBATCH --partition=physical
 #SBATCH --output=output/sequential.out
 #SBATCH --job-name="sequential"
 #SBATCH --time=0-12:00:00
