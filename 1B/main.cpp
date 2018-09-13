@@ -16,30 +16,26 @@ int mandelbrotSetCount(double realLower, double realUpper, double imgLower, doub
     double img_step = (imgUpper - imgLower) / num;
     double tmpReal, tmpImg, zReal, zImg, z2Real, z2Img = 0.0;
 
-    for (int real = 0; real < num; real += nrProcesses) {
+    for (int real = 0; (real + idProcess) < num; real += nrProcesses) {
         /// Precalculation.
-        iter = (real + idProcess);
+        tmpReal = realLower + (real + idProcess) * realStep;
+        for (int img = 0; img < num; ++img) {
+            tmpImg = imgLower + img * img_step;
+            zReal = tmpReal;
+            zImg = tmpImg;
+            z2Real = z2Img = 0.0;
 
-        if (iter < num) {
-            tmpReal = realLower + iter * realStep;
-            for (int img = 0; img < num; ++img) {
-                tmpImg = imgLower + img * img_step;
-                zReal = tmpReal;
-                zImg = tmpImg;
-                z2Real = z2Img = 0.0;
+            for(int iters = 0; iters < maxiter; iters++){
+                z2Real = zReal * zReal - zImg * zImg;
+                z2Img = 2.0 * zReal * zImg;
+                zReal = z2Real + tmpReal;
+                zImg = z2Img + tmpImg;
 
-                for(int iters = 0; iters < maxiter; iters++){
-                    z2Real = zReal * zReal - zImg * zImg;
-                    z2Img = 2.0 * zReal * zImg;
-                    zReal = z2Real + tmpReal;
-                    zImg = z2Img + tmpImg;
-
-                    if(zReal * zReal + zImg * zImg > 4.0)
-                        goto break1;
-                }
-                count++;
-                break1:;
+                if(zReal * zReal + zImg * zImg > 4.0)
+                    goto break1;
             }
+            count++;
+            break1:;
         }
     }
 
