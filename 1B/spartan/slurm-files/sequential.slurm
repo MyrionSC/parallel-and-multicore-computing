@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#SBATCH --array=0-10
 #SBATCH --partition=physical
 #SBATCH --output=output/sequential.out
 #SBATCH --job-name="sequential"
@@ -7,7 +8,7 @@
 #SBATCH --ntasks=1
 
 echo " "
-echo " *** Sequential ***"
+echo " *** Sequential, run $SLURM_ARRAY_TASK_ID ***"
 echo " "
 
 g++ -std=c++11 ../mandelbrot-sequential.cpp -o seq 

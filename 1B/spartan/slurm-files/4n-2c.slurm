@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#SBATCH --array=0-10
 #SBATCH --partition=physical
 #SBATCH --output=output/4n-8c.out
 #SBATCH --job-name="4n-8c"
@@ -14,7 +15,7 @@
 module load OpenMPI/2.1.2-GCC-6.4.0-2.28
 
 echo " "
-echo " *** 4 Nodes, 8 Cores ***"
+echo " *** 4 Nodes, 8 Cores, run $SLURM_ARRAY_TASK_ID ***"
 echo " "
 
 mpic++ -std=c++11 ../main.cpp -o main
