@@ -2,7 +2,7 @@
 
 #SBATCH --array=0-10
 #SBATCH --partition=physical
-#SBATCH --output=output/4n-8c.out
+#SBATCH --output=output/4n-8c-run-%a.out
 #SBATCH --job-name="4n-8c"
 #SBATCH --time=0-12:00:00
 #SBATCH --nodes=4

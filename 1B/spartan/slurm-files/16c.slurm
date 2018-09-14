@@ -3,7 +3,7 @@
 #SBATCH --array=0-10
 #SBATCH --partition=physical
 #SBATCH --output=output/16c-run-%a.out
-#SBATCH --job-name="16c-%a"
+#SBATCH --job-name="16c"
 #SBATCH --time=0-12:00:00
 #SBATCH --ntasks=16
 
