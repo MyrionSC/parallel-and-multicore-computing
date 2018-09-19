@@ -1,7 +1,8 @@
 #!/bin/bash
 
+#SBATCH --array=0-10
 #SBATCH --partition=physical
-#SBATCH --output=output/2n-1c.out
+#SBATCH --output=output/2n-1c-run-%a.out
 #SBATCH --job-name="2n-1c"
 #SBATCH --time=0-12:00:00
 #SBATCH --nodes=2 
@@ -13,7 +14,7 @@
 module load OpenMPI/2.1.2-GCC-6.4.0-2.28
 
 echo " "
-echo " *** Two Nodes, 5 Cores ***"
+echo " *** Two Nodes, 5 Cores, run $SLURM_ARRAY_TASK_ID ***"
 echo " "
 
 mpic++  -std=c++11 ../main.cpp -o main

@@ -2,15 +2,15 @@
 
 #SBATCH --array=0-10
 #SBATCH --partition=physical
-#SBATCH --output=output/16c-run-%a.out
-#SBATCH --job-name="16c"
+#SBATCH --output=output/32c-run-%a.out
+#SBATCH --job-name="32c"
 #SBATCH --time=0-12:00:00
 #SBATCH --ntasks=16
 
 module load OpenMPI/2.1.2-GCC-6.4.0-2.28
 
 echo " "
-echo " *** 16 Tasks, run $SLURM_ARRAY_TASK_ID ***"
+echo " *** 32 Tasks, run $SLURM_ARRAY_TASK_ID ***"
 echo " "
 mpic++ -std=c++11 ../main.cpp -o main
 

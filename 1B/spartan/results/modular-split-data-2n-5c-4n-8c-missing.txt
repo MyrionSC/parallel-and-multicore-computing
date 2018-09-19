@@ -1,0 +1,838 @@
+execution date: 2018-09-13-15-38-01
+*******
+ 
+ 
+ *** 16 Tasks, run 0 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.328s
+user	0m33.526s
+sys	0m0.229s
+ 
+ 
+ *** 16 Tasks, run 10 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.532s
+user	0m25.381s
+sys	0m0.181s
+ 
+ 
+ *** 16 Tasks, run 1 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.965s
+user	0m3.623s
+sys	0m0.303s
+ 
+ 
+ *** 16 Tasks, run 2 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.456s
+user	0m3.482s
+sys	0m0.046s
+ 
+ 
+ *** 16 Tasks, run 3 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.307s
+user	0m33.514s
+sys	0m0.219s
+ 
+ 
+ *** 16 Tasks, run 4 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.567s
+user	0m25.268s
+sys	0m0.190s
+ 
+ 
+ *** 16 Tasks, run 5 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.294s
+user	0m3.460s
+sys	0m0.049s
+ 
+ 
+ *** 16 Tasks, run 6 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.332s
+user	0m33.506s
+sys	0m0.242s
+ 
+ 
+ *** 16 Tasks, run 7 ***
+ 
+Program output:
+--------------------------------------------------------------------------
+Open MPI tried to fork a new process via the "execve" system call but
+failed.  Open MPI checks many things before attempting to launch a
+child process, but nothing is perfect. This error may be indicative
+of another problem on the target host, or even something as silly as
+having specified a directory for your application. Your job will now
+abort.
+
+  Local host:        spartan-bm029
+  Application name:  ./main
+  Error:             No such file or directory
+--------------------------------------------------------------------------
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] usock_peer_send_blocking: send() to socket 82 failed: Broken pipe (32)
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] ORTE_ERROR_LOG: Unreachable in file oob_usock_connection.c at line 316
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0]-[[23770,1],5] usock_peer_accept: usock_peer_send_connect_ack failed
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] usock_peer_send_blocking: send() to socket 83 failed: Broken pipe (32)
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] ORTE_ERROR_LOG: Unreachable in file oob_usock_connection.c at line 316
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0]-[[23770,1],4] usock_peer_accept: usock_peer_send_connect_ack failed
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] usock_peer_send_blocking: send() to socket 84 failed: Broken pipe (32)
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] ORTE_ERROR_LOG: Unreachable in file oob_usock_connection.c at line 316
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0]-[[23770,1],6] usock_peer_accept: usock_peer_send_connect_ack failed
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] usock_peer_send_blocking: send() to socket 87 failed: Broken pipe (32)
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] ORTE_ERROR_LOG: Unreachable in file oob_usock_connection.c at line 316
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0]-[[23770,1],7] usock_peer_accept: usock_peer_send_connect_ack failed
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] usock_peer_send_blocking: send() to socket 88 failed: Broken pipe (32)
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] ORTE_ERROR_LOG: Unreachable in file oob_usock_connection.c at line 316
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0]-[[23770,1],9] usock_peer_accept: usock_peer_send_connect_ack failed
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] usock_peer_send_blocking: send() to socket 89 failed: Broken pipe (32)
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] ORTE_ERROR_LOG: Unreachable in file oob_usock_connection.c at line 316
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0]-[[23770,1],8] usock_peer_accept: usock_peer_send_connect_ack failed
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] usock_peer_send_blocking: send() to socket 90 failed: Broken pipe (32)
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] ORTE_ERROR_LOG: Unreachable in file oob_usock_connection.c at line 316
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0]-[[23770,1],10] usock_peer_accept: usock_peer_send_connect_ack failed
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] usock_peer_send_blocking: send() to socket 91 failed: Broken pipe (32)
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0] ORTE_ERROR_LOG: Unreachable in file oob_usock_connection.c at line 316
+[spartan-bm028.hpc.unimelb.edu.au:24488] [[23770,0],0]-[[23770,1],11] usock_peer_accept: usock_peer_send_connect_ack failed
+[warn] Epoll ADD(4) on fd 41 failed.  Old events were 0; read change was 0 (none); write change was 1 (add): Bad file descriptor
+[warn] Epoll ADD(4) on fd 47 failed.  Old events were 0; read change was 0 (none); write change was 1 (add): Bad file descriptor
+[warn] Epoll ADD(4) on fd 56 failed.  Old events were 0; read change was 0 (none); write change was 1 (add): Bad file descriptor
+[warn] Epoll ADD(4) on fd 64 failed.  Old events were 0; read change was 0 (none); write change was 1 (add): Bad file descriptor
+[warn] Epoll ADD(4) on fd 70 failed.  Old events were 0; read change was 0 (none); write change was 1 (add): Bad file descriptor
+[warn] Epoll ADD(4) on fd 74 failed.  Old events were 0; read change was 0 (none); write change was 1 (add): Bad file descriptor
+[warn] Epoll ADD(4) on fd 72 failed.  Old events were 0; read change was 0 (none); write change was 1 (add): Bad file descriptor
+[warn] Epoll ADD(4) on fd 35 failed.  Old events were 0; read change was 0 (none); write change was 1 (add): Bad file descriptor
+[warn] Epoll ADD(4) on fd 80 failed.  Old events were 0; read change was 0 (none); write change was 1 (add): Bad file descriptor
+[warn] Epoll ADD(4) on fd 81 failed.  Old events were 0; read change was 0 (none); write change was 1 (add): Bad file descriptor
+--------------------------------------------------------------------------
+mpirun noticed that process rank 12 with PID 23594 on node spartan-bm029 exited on signal 85 (Unknown signal 85).
+--------------------------------------------------------------------------
+[warn] Epoll ADD(4) on fd 85 failed.  Old events were 0; read change was 0 (none); write change was 1 (add): Bad file descriptor
+[warn] Epoll ADD(4) on fd 86 failed.  Old events were 0; read change was 0 (none); write change was 1 (add): Bad file descriptor
+[spartan-bm028.hpc.unimelb.edu.au:24488] 1 more process has sent help message help-orte-odls-default.txt / execve error
+[spartan-bm028.hpc.unimelb.edu.au:24488] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+
+real	0m2.871s
+user	0m0.241s
+sys	0m0.301s
+ 
+ 
+ *** 16 Tasks, run 8 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.053s
+user	0m3.461s
+sys	0m0.070s
+ 
+ 
+ *** 16 Tasks, run 9 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.343s
+user	0m33.518s
+sys	0m0.231s
+ 
+ 
+ *** Two Nodes, 5 Cores, run 9 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+28
+0
+3785
+9280
+9250
+2742
+122717
+113486
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+m5.566s
+user	0m20.842s
+sys	0m0.069s
+ 
+
+real	0m5.572s
+user	0m5.377s
+sys	0m0.046s
+ 
+
+real	0m7.037s
+user	0m26.706s
+sys	0m0.108s
+ 
+ 
+ *** 32 Tasks, run 0 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.528s
+user	0m16.965s
+sys	0m0.157s
+ 
+ 
+ *** 32 Tasks, run 10 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.531s
+user	0m5.512s
+sys	0m0.551s
+ 
+ 
+ *** 32 Tasks, run 1 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.430s
+user	0m5.335s
+sys	0m0.279s
+ 
+ 
+ *** 32 Tasks, run 2 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.347s
+user	0m33.670s
+sys	0m0.235s
+ 
+ 
+ *** 32 Tasks, run 3 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.477s
+user	0m3.495s
+sys	0m0.073s
+ 
+ 
+ *** 32 Tasks, run 4 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m3.024s
+user	0m5.522s
+sys	0m0.548s
+ 
+ 
+ *** 32 Tasks, run 5 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.329s
+user	0m33.486s
+sys	0m0.263s
+ 
+ 
+ *** 32 Tasks, run 6 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.388s
+user	0m3.464s
+sys	0m0.050s
+ 
+ 
+ *** 32 Tasks, run 7 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.850s
+user	0m5.535s
+sys	0m0.545s
+ 
+ 
+ *** 32 Tasks, run 8 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.294s
+user	0m33.470s
+sys	0m0.216s
+ 
+ 
+ *** 32 Tasks, run 9 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m2.017s
+user	0m3.455s
+sys	0m0.049s
+ 
+ 
+ *** 4 Nodes, 8 Cores, run 10 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m5.025s
+user	0m3.694s
+sys	0m0.579s
+ 
+ 
+ *** Sequential, run 0 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m26.674s
+user	0m26.650s
+sys	0m0.000s
+ 
+ 
+ *** Sequential, run 10 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m26.647s
+user	0m26.646s
+sys	0m0.000s
+ 
+ 
+ *** Sequential, run 1 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m33.191s
+user	0m33.188s
+sys	0m0.000s
+ 
+ 
+ *** Sequential, run 2 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m26.659s
+user	0m26.652s
+sys	0m0.001s
+ 
+ 
+ *** Sequential, run 3 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m26.009s
+user	0m25.970s
+sys	0m0.002s
+ 
+ 
+ *** Sequential, run 4 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m26.000s
+user	0m25.970s
+sys	0m0.001s
+ 
+ 
+ *** Sequential, run 5 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m26.656s
+user	0m26.648s
+sys	0m0.001s
+ 
+ 
+ *** Sequential, run 6 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m26.658s
+user	0m26.653s
+sys	0m0.000s
+ 
+ 
+ *** Sequential, run 7 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m26.146s
+user	0m26.141s
+sys	0m0.002s
+ 
+ 
+ *** Sequential, run 8 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m26.146s
+user	0m26.140s
+sys	0m0.002s
+ 
+ 
+ *** Sequential, run 9 ***
+ 
+Program output:
+2538
+3508
+86677
+1
+2497
+528
+0
+3785
+9280
+9250
+2742
+122717
+113486
+
+real	0m26.487s
+user	0m26.437s
+sys	0m0.046s
+ 

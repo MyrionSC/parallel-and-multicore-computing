@@ -1,3 +1,11 @@
+mpic++ -std=c++11 main.cpp -o main
+mpirun main
+
+
+the version of OpenMPI used on spartan was 2.1.2-GCC-6.4.0-2.28 with gcc 6.4.0
+
+Below is an example of a slurm file used
+
 #!/bin/bash
 
 #SBATCH --array=0-10
@@ -17,4 +25,5 @@ mpic++ -std=c++11 ../main.cpp -o main
 echo "Program output:"
 time mpirun ./main -2.0 1.0 -1.0 1.0 100 10000 -1 1.0 0.0 1.0 100 10000 -1 1.0 -1.0 0.0 500 10000 -1 0.0 -2.0 -1.0 100 10000 -1 0.0 0.0 2.0 100 10000 0 2.0 0.0 2.0 100 10000 1 2.0 -1.0 1.0 200 10000 -2.0 2.0 -2.0 2.0 200 10000 -1.0 2.0 -1.0 1.0 200 10000 0.0 2.0 0.0 1.0 300 10000 0.0 2.0 -2.0 1.0 200 10000 -1 0.0 -1.0 1.0 500 10000 -1 1.0 -1.0 2.0 700 10000
 echo " "
+
 
