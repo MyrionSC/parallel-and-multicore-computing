@@ -1,0 +1,4 @@
+*** cuda example ***
+
+/var/spool/slurm/job5031639/slurm_script: line 16: 15719 Segmentation fault      (core dumped) ./add
+

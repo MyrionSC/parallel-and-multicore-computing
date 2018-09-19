@@ -1,0 +1,4 @@
+module load CUDA/9.2.88-GCC-6.2.0
+
+nvcc cuda-example.cu -o add
+./add
