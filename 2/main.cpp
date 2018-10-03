@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
-#include "omp.h"
-#include "mpi.h"
 
 /// A utility function that returns maximum of two integers.
 int max(int a, int b) { return (a > b)? a : b; }
