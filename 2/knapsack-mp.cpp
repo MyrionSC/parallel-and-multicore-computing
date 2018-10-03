@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include "omp.h"
 
 /// A utility function that returns maximum of two integers.
 int max(int a, int b) { return (a > b)? a : b; }
@@ -29,6 +30,13 @@ int knapSack(int W, int wt[], int val[], int n)
 /// Slightly modified.
 int main(int argc, char *argv[])
 {
+    int maxNrThreads = omp_get_max_threads();
+    printf("Max threads: %d\n", maxNrThreads);
+
+    /// Set number of threads.
+    omp_set_num_threads(maxNrThreads);
+
+
     int  W = -1;
     std::vector<int> values;
     std::vector<int> weights;
