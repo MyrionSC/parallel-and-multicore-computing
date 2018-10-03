@@ -18,7 +18,9 @@ echo " "
 g++ knapsack-sequential.cpp -o knapsack-sequential
 g++ -fopenmp knapsack-mp.cpp -o knapsack-mp
 mpic++ -std=c++11 ../knapsack-mpi.cpp -o knapsack-mpi
+#mpic++ ../knapsack-mpi.cpp -o knapsack-mpi
 mpic++ -fopenmp -std=c++11 ../knapsack-hybrid.cpp -o knapsack-hybrid
+#mpic++ -fopenmp ../knapsack-hybrid.cpp -o knapsack-hybrid
 
 
 echo "Sequential output:"
