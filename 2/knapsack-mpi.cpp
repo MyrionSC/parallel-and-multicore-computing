@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include "mpi.h"
 
 /// A utility function that returns maximum of two integers.
 int max(int a, int b) { return (a > b)? a : b; }
@@ -29,6 +30,15 @@ int knapSack(int W, int wt[], int val[], int n)
 /// Slightly modified.
 int main(int argc, char *argv[])
 {
+    /// OpenMPI
+    int root = 0;
+    int nrProcesses, idProcces;
+    MPI_Init(NULL, NULL);
+    MPI_Comm_size(MPI_COMM_WORLD, &nrProcesses);
+    MPI_Comm_rank(MPI_COMM_WORLD, &idProcces);
+    printf("num processes: %d\n", nrProcesses);
+    printf("Process Id: %d\n\n", idProcces);
+
     int  W = -1;
     std::vector<int> values;
     std::vector<int> weights;
@@ -55,5 +65,7 @@ int main(int argc, char *argv[])
 
     /// Execute algorithm.
     printf("%d", knapSack(W, &weights.at(0), &values.at(0), values.size()));
+
+    MPI_Finalize();
     return 0;
 }
