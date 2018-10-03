@@ -1,0 +1,31 @@
+knapsack
+- what problem to solve
+
+
+How does configuration affect the result
+- evenly distributed cores
+- randomly distributed
+
+How does topology affect the result
+- hypercube
+- mesh
+- array
+- circle
+- torque
+
+
+Decide on gpu vs openmpi vs openmp vs hybrid
+
+
+Question
+- does it make sense to compare topology?
+- which topology is spartan and can you take advantage of it?
+
+
+
+Research question
+- mpi vs mp vs hybrid?
+	- Hypothesis: mp > hybrid > mpi
+- Different algorithms
+
+
