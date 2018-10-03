@@ -12,4 +12,7 @@ if (OPENMP_FOUND)
     set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
 
-add_executable(2-par main.cpp)
+add_executable(2-seq knapsack-sequential.cpp)
+add_executable(2-mp knapsack-mp.cpp)
+add_executable(2-mpi knapsack-mpi.cpp)
+add_executable(2-hybrid knapsack-hybrid.cpp)
