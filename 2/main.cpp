@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <iostream>
-#include "omp.h"
-#include "mpi.h"
-
 /* A Naive recursive implementation of 0-1 Knapsack problem */
 #include<stdio.h>
 
