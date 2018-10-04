@@ -1,35 +1,42 @@
-#include <stdio.h>
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 #include "omp.h"
 
-/// A utility function that returns maximum of two integers.
-int max(int a, int b) { return (a > b)? a : b; }
+#define MAX_NODES 10000
 
-/// Returns the maximum value that can be put in a knapsack of capacity W.
-int knapSack(int W, int wt[], int val[], int n)
-{
-    int i, w;
-    int K[n+1][W+1];
+int graph[MAX_NODES][MAX_NODES] = {0};
 
-    // Build table K[][] in bottom up manner
+// implementation of traveling Salesman Problem
+int travllingSalesmanProblem(int nrNodes) {
+    // store all vertex apart from source vertex
+    std::vector<int> vertex;
+
+    for (int i = 0; i < nrNodes; i++)
+        if (i != 0)
+            vertex.push_back(i);
+
+    // store minimum weight Hamiltonian Cycle.
+    int min_path = INT_MAX;
+
     #pragma omp parallel
-    for (i = 0; i <= n; i++) {
-        for (w = 0; w <= W; w++) {
-            if (i==0 || w==0)
-                K[i][w] = 0;
-            else if (wt[i-1] <= w)
-                K[i][w] = max(val[i-1] + K[i-1][w-wt[i-1]],  K[i-1][w]);
-            else
-                K[i][w] = K[i-1][w];
+    for ( ; next_permutation(vertex.begin(), vertex.end()); ) {
+        int currentPathweight = 0;
+        int k = 0;
+
+        for (int i = 0; i < vertex.size(); i++) {
+            currentPathweight += graph[k][vertex[i]];
+            k = vertex[i];
         }
+
+        currentPathweight += graph[k][0];
+
+        // update minimum
+        min_path = std::min(min_path, currentPathweight);
     }
 
-    return K[n][W];
+    return min_path;
 }
 
-/// Basic knapsack example from: https://www.geeksforgeeks.org/0-1-knapsack-problem-dp-10/+-
-/// Slightly modified.
+// driver program to test above function
 int main(int argc, char *argv[])
 {
     int maxNrThreads = omp_get_max_threads();
@@ -37,11 +44,6 @@ int main(int argc, char *argv[])
 
     /// Set number of threads.
     omp_set_num_threads(maxNrThreads);
-
-
-    int  W = -1;
-    std::vector<int> values;
-    std::vector<int> weights;
 
     if(argc != 2){
         printf("The path to the input file is not specified as a parameter.\n");
@@ -55,15 +57,14 @@ int main(int argc, char *argv[])
     }
 
     /// Read input file.
-    fscanf(in_file,"%d", &W);
-    int value, weight;
+    int nrNodes = -1;
+    fscanf(in_file,"%d", &nrNodes);
+    int src, dst, wgt;
 
-    while(fscanf(in_file,"%d %d", &value, &weight) != EOF) {
-        values.push_back(value);
-        weights.push_back(weight);
+    while(fscanf(in_file,"%d %d %d", &src, &dst, &wgt) != EOF) {
+        graph[src][dst] = wgt;
     }
 
-    /// Execute algorithm.
-    printf("%d", knapSack(W, &weights.at(0), &values.at(0), values.size()));
+    std::cout << travllingSalesmanProblem(nrNodes) << std::endl;
     return 0;
 }

@@ -2,15 +2,12 @@
 
 #define MAX_NODES 10000
 
-using namespace std;
-
 int graph[MAX_NODES][MAX_NODES] = {0};
 
 // implementation of traveling Salesman Problem
-int travllingSalesmanProblem(int nrNodes)
-{
+int travllingSalesmanProblem(int nrNodes) {
     // store all vertex apart from source vertex
-    vector<int> vertex;
+    std::vector<int> vertex;
 
     for (int i = 0; i < nrNodes; i++)
         if (i != 0)
@@ -19,22 +16,20 @@ int travllingSalesmanProblem(int nrNodes)
     // store minimum weight Hamiltonian Cycle.
     int min_path = INT_MAX;
 
-    do {
-        // store current Path weight(cost)
-        int current_pathweight = 0;
+    for ( ; next_permutation(vertex.begin(), vertex.end()); ) {
+            int currentPathweight = 0;
+            int k = 0;
 
-        // compute current path weight
-        int k = 0;
-        for (int i = 0; i < vertex.size(); i++) {
-            current_pathweight += graph[k][vertex[i]];
-            k = vertex[i];
-        }
-        current_pathweight += graph[k][0];
+            for (int i = 0; i < vertex.size(); i++) {
+                currentPathweight += graph[k][vertex[i]];
+                k = vertex[i];
+            }
 
-        // update minimum
-        min_path = min(min_path, current_pathweight);
+            currentPathweight += graph[k][0];
 
-    } while (next_permutation(vertex.begin(), vertex.end()));
+            // update minimum
+            min_path = std::min(min_path, currentPathweight);
+    }
 
     return min_path;
 }
@@ -62,6 +57,6 @@ int main(int argc, char *argv[])
         graph[src][dst] = wgt;
     }
 
-    cout << travllingSalesmanProblem(nrNodes) << endl;
+    std::cout << travllingSalesmanProblem(nrNodes) << std::endl;
     return 0;
 }
