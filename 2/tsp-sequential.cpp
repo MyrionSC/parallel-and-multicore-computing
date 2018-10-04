@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     int src, dst, wgt;
 
     while(fscanf(in_file,"%d %d %d", &src, &dst, &wgt) != EOF) {
-        graph[src-1][dst-1] = wgt;
+        graph[src][dst] = wgt;
     }
 
     cout << travllingSalesmanProblem(nrNodes) << endl;
