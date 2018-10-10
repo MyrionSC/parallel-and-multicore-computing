@@ -17,8 +17,8 @@ for i in range(0, n):
             if random.random() < 0.3:
                 adjMatrix[i][j] = adjMatrix[j][i] = random.randint(10, 100)
 
-for row in adjMatrix:
-    print(row)
+#for row in adjMatrix:
+#    print(row)
 
 f = open(str(n) + ".txt", "w+")
 f.write(str(n) + "\n")
