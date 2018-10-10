@@ -2,7 +2,7 @@
 #include <limits.h>
 
 // Number of vertices in the graph
-#define MAX_NODES 100
+#define MAX_NODES 1000
 static int nrNodes = -1;
 
 // A utility function to find the vertex with minimum distance value, from

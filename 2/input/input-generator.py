@@ -15,7 +15,7 @@ for i in range(0, n):
     for j in range(0, n):
         if i != j and adjMatrix[i][j] == 0:
             if random.random() < 0.3:
-                adjMatrix[i][j] = adjMatrix[j][i] = random.randint(10, 100)
+                adjMatrix[i][j] = adjMatrix[j][i] = random.randint(10, 1000)
 
 # for row in adjMatrix:
 #    print(row)
