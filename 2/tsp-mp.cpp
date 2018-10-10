@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <limits.h>
 #include "omp.h"
 
 #define MAX_NODES 10000
@@ -17,28 +18,46 @@ int travllingSalesmanProblem(int nrNodes) {
     // store minimum weight Hamiltonian Cycle.
     int min_path = INT_MAX;
 
-    #pragma omp parallel
-    for (int i = 0; i < nrNodes; i++) {
 
-        auto vertexprime = vertex;
-        std::rotate(vertexprime.begin(), vertexprime.begin() + i, vertexprime.begin() + i + 1);
+    for (int i = 0; i < vertex.size(); ++i) {
+        auto perm = vertex;
+        std::rotate(perm.begin(), perm.begin() + i, perm.begin() + i + 1);
 
         do {
             int currentPathweight = 0;
             int k = 0;
 
-            for (int j = 0; j < vertexprime.size(); j++) {
-                currentPathweight += graph[k][vertexprime[j]];
-                k = vertexprime[j];
+            for (int i = 0; i < vertex.size(); i++) {
+                currentPathweight += graph[k][vertex.at(i)];
+                k = vertex.at(i);
             }
 
+            currentPathweight += graph[k][0];
+
+            // update minimum
             min_path = std::min(min_path, currentPathweight);
+        }
+        while (std::next_permutation(perm.begin() + 1, perm.end()));
 
-        } while(next_permutation(vertexprime.begin(), vertexprime.end()));
-
-        // update minimum
     }
+//    #pragma omp parallel
+//    for ( ; next_permutation(vertex.begin(), vertex.end()); ) {
+//        int currentPathweight = 0;
+//        int k = 0;
+//
+//        for (int i = 0; i < vertex.size(); i++) {
+//            currentPathweight += graph[k][vertex.at(i)];
+//            k = vertex.at(i);
+//        }
+//
+//        currentPathweight += graph[k][0];
+//
+//        // update minimum
+//        min_path = std::min(min_path, currentPathweight);
+//    }
 
+=======
+>>>>>>> Stashed changes
 
     return min_path;
 }
