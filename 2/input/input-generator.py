@@ -14,10 +14,11 @@ adjMatrix = [[0 for y in range(n)] for x in range(n)]
 for i in range(0, n):
     for j in range(0, n):
         if i != j and adjMatrix[i][j] == 0:
-            adjMatrix[i][j] = adjMatrix[j][i] = random.randint(10, 100)
+            if random.random() < 0.3:
+                adjMatrix[i][j] = adjMatrix[j][i] = random.randint(10, 100)
 
-# for row in adjMatrix:
-#     print(row)
+for row in adjMatrix:
+    print(row)
 
 f = open(str(n) + ".txt", "w+")
 f.write(str(n) + "\n")
