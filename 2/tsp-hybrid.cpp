@@ -75,5 +75,6 @@ int main(int argc, char *argv[])
     }
 
     std::cout << travllingSalesmanProblem(nrNodes) << std::endl;
+    MPI_Finalize();
     return 0;
 }

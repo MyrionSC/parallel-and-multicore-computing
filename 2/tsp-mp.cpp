@@ -18,20 +18,27 @@ int travllingSalesmanProblem(int nrNodes) {
     int min_path = INT_MAX;
 
     #pragma omp parallel
-    for ( ; next_permutation(vertex.begin(), vertex.end()); ) {
-        int currentPathweight = 0;
-        int k = 0;
+    for (int i = 0; i < nrNodes; i++) {
 
-        for (int i = 0; i < vertex.size(); i++) {
-            currentPathweight += graph[k][vertex[i]];
-            k = vertex[i];
-        }
+        auto vertexprime = vertex;
+        std::rotate(vertexprime.begin(), vertexprime.begin() + i, vertexprime.begin() + i + 1);
 
-        currentPathweight += graph[k][0];
+        do {
+            int currentPathweight = 0;
+            int k = 0;
+
+            for (int j = 0; j < vertexprime.size(); j++) {
+                currentPathweight += graph[k][vertexprime[j]];
+                k = vertexprime[j];
+            }
+
+            min_path = std::min(min_path, currentPathweight);
+
+        } while(next_permutation(vertexprime.begin(), vertexprime.end()));
 
         // update minimum
-        min_path = std::min(min_path, currentPathweight);
     }
+
 
     return min_path;
 }
