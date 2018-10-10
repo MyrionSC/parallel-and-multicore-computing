@@ -3,7 +3,7 @@
 #include "omp.h"
 
 // Number of vertices in the graph
-#define MAX_NODES 100
+#define MAX_NODES 1000
 static int nrNodes = -1;
 
 // A utility function to find the vertex with minimum distance value, from
@@ -95,6 +95,10 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    /// Timing scope.
+    double timeBegin, timeEnd;
+    timeBegin = omp_get_wtime();
+
     /// Read input file.
     fscanf(in_file,"%d", &nrNodes);
     int src, dst, wgt;
@@ -104,6 +108,10 @@ int main(int argc, char *argv[])
     }
 
     dijkstra(graph, 0);
+
+    /// Print execution time.
+    timeEnd = omp_get_wtime();
+    printf("%.16g", timeEnd-timeBegin);
 
     return 0;
 }
