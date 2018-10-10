@@ -2,64 +2,74 @@
 #include <limits.h>
 #include "omp.h"
 
-#define MAX_NODES 10000
+// Number of vertices in the graph
+#define MAX_NODES 1000
+static int nrNodes = -1;
 
-int graph[MAX_NODES][MAX_NODES] = {0};
+// A utility function to find the vertex with minimum distance value, from
+// the set of vertices not yet included in shortest path tree
+int minDistance(int dist[], bool sptSet[])
+{
+    // Initialize min value
+    int min = INT_MAX, min_index;
 
-// implementation of traveling Salesman Problem
-int travllingSalesmanProblem(int nrNodes) {
-    // store all vertex apart from source vertex
-    std::vector<int> vertex;
+    for (int v = 0; v < nrNodes; v++)
+        if (sptSet[v] == false && dist[v] <= min)
+            min = dist[v], min_index = v;
 
+    return min_index;
+}
+
+// A utility function to print the constructed distance array
+int printSolution(int dist[], int n)
+{
+    printf("Vertex   Distance from Source\n");
     for (int i = 0; i < nrNodes; i++)
-        if (i != 0)
-            vertex.push_back(i);
+        printf("%d tt %d\n", i, dist[i]);
+}
 
-    // store minimum weight Hamiltonian Cycle.
-    int min_path = INT_MAX;
+// Function that implements Dijkstra's single source shortest path algorithm
+// for a graph represented using adjacency matrix representation
+void dijkstra(int graph[MAX_NODES][MAX_NODES], int src)
+{
+    int dist[nrNodes];     // The output array.  dist[i] will hold the shortest
+    // distance from src to i
 
+    bool sptSet[nrNodes]; // sptSet[i] will true if vertex i is included in shortest
+    // path tree or shortest distance from src to i is finalized
 
-    for (int i = 0; i < vertex.size(); ++i) {
-        auto perm = vertex;
-        std::rotate(perm.begin(), perm.begin() + i, perm.begin() + i + 1);
+    // Initialize all distances as INFINITE and stpSet[] as false
+    #pragma omp parallel for
+    for (int i = 0; i < nrNodes; i++)
+        dist[i] = INT_MAX, sptSet[i] = false;
 
-        do {
-            int currentPathweight = 0;
-            int k = 0;
+    // Distance of source vertex from itself is always 0
+    dist[src] = 0;
 
-            for (int i = 0; i < vertex.size(); i++) {
-                currentPathweight += graph[k][vertex.at(i)];
-                k = vertex.at(i);
-            }
+    // Find shortest path for all vertices
+    #pragma omp parallel for
+    for (int count = 0; count < nrNodes-1; count++)
+    {
+        // Pick the minimum distance vertex from the set of vertices not
+        // yet processed. u is always equal to src in the first iteration.
+        int u = minDistance(dist, sptSet);
 
-            currentPathweight += graph[k][0];
+        // Mark the picked vertex as processed
+        sptSet[u] = true;
 
-            // update minimum
-            min_path = std::min(min_path, currentPathweight);
-        }
-        while (std::next_permutation(perm.begin() + 1, perm.end()));
+        // Update dist value of the adjacent vertices of the picked vertex.
+        for (int v = 0; v < nrNodes; v++)
 
+            // Update dist[v] only if is not in sptSet, there is an edge from
+            // u to v, and total weight of path from src to  v through u is
+            // smaller than current value of dist[v]
+            if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX
+                && dist[u]+graph[u][v] < dist[v])
+                dist[v] = dist[u] + graph[u][v];
     }
-//    #pragma omp parallel
-//    for ( ; next_permutation(vertex.begin(), vertex.end()); ) {
-//        int currentPathweight = 0;
-//        int k = 0;
-//
-//        for (int i = 0; i < vertex.size(); i++) {
-//            currentPathweight += graph[k][vertex.at(i)];
-//            k = vertex.at(i);
-//        }
-//
-//        currentPathweight += graph[k][0];
-//
-//        // update minimum
-//        min_path = std::min(min_path, currentPathweight);
-//    }
 
-=======
->>>>>>> Stashed changes
-
-    return min_path;
+    // print the constructed distance array
+    printSolution(dist, nrNodes);
 }
 
 // driver program to test above function
@@ -70,6 +80,9 @@ int main(int argc, char *argv[])
 
     /// Set number of threads.
     omp_set_num_threads(maxNrThreads);
+
+    /* Let us create the example graph discussed above */
+    int graph[MAX_NODES][MAX_NODES] = {0};
 
     if(argc != 2){
         printf("The path to the input file is not specified as a parameter.\n");
@@ -82,8 +95,11 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    /// Timing scope.
+    double timeBegin, timeEnd;
+    timeBegin = omp_get_wtime();
+
     /// Read input file.
-    int nrNodes = -1;
     fscanf(in_file,"%d", &nrNodes);
     int src, dst, wgt;
 
@@ -91,6 +107,11 @@ int main(int argc, char *argv[])
         graph[src][dst] = wgt;
     }
 
-    std::cout << travllingSalesmanProblem(nrNodes) << std::endl;
+    dijkstra(graph, 0);
+
+    /// Print execution time.
+    timeEnd = omp_get_wtime();
+    printf("%.16g", timeEnd-timeBegin);
+
     return 0;
 }
