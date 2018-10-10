@@ -18,28 +18,6 @@ int travllingSalesmanProblem(int nrNodes) {
     // store minimum weight Hamiltonian Cycle.
     int min_path = INT_MAX;
 
-<<<<<<< Updated upstream
-    #pragma omp parallel
-    for (int i = 0; i < nrNodes; i++) {
-
-        auto vertexprime = vertex;
-        std::rotate(vertexprime.begin(), vertexprime.begin() + i, vertexprime.begin() + i + 1);
-
-        do {
-            int currentPathweight = 0;
-            int k = 0;
-
-            for (int j = 0; j < vertexprime.size(); j++) {
-                currentPathweight += graph[k][vertexprime[j]];
-                k = vertexprime[j];
-            }
-
-            min_path = std::min(min_path, currentPathweight);
-
-        } while(next_permutation(vertexprime.begin(), vertexprime.end()));
-
-        // update minimum
-=======
 
     for (int i = 0; i < vertex.size(); ++i) {
         auto perm = vertex;
@@ -61,7 +39,6 @@ int travllingSalesmanProblem(int nrNodes) {
         }
         while (std::next_permutation(perm.begin() + 1, perm.end()));
 
->>>>>>> Stashed changes
     }
 //    #pragma omp parallel
 //    for ( ; next_permutation(vertex.begin(), vertex.end()); ) {
@@ -78,7 +55,6 @@ int travllingSalesmanProblem(int nrNodes) {
 //        // update minimum
 //        min_path = std::min(min_path, currentPathweight);
 //    }
-<<<<<<< Updated upstream
 
 =======
 >>>>>>> Stashed changes

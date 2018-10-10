@@ -12,7 +12,7 @@ int minDistance(int dist[], bool sptSet[])
     // Initialize min value
     int min = INT_MAX, min_index;
 
-    for (int v = 0; v < MAX_NODES; v++)
+    for (int v = 0; v < nrNodes; v++)
         if (sptSet[v] == false && dist[v] <= min)
             min = dist[v], min_index = v;
 
@@ -23,7 +23,7 @@ int minDistance(int dist[], bool sptSet[])
 int printSolution(int dist[], int n)
 {
     printf("Vertex   Distance from Source\n");
-    for (int i = 0; i < MAX_NODES; i++)
+    for (int i = 0; i < nrNodes; i++)
         printf("%d tt %d\n", i, dist[i]);
 }
 
