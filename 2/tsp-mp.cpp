@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <limits.h>
 #include "omp.h"
 
 #define MAX_NODES 10000
@@ -38,6 +39,21 @@ int travllingSalesmanProblem(int nrNodes) {
 
         // update minimum
     }
+//    #pragma omp parallel
+//    for ( ; next_permutation(vertex.begin(), vertex.end()); ) {
+//        int currentPathweight = 0;
+//        int k = 0;
+//
+//        for (int i = 0; i < vertex.size(); i++) {
+//            currentPathweight += graph[k][vertex.at(i)];
+//            k = vertex.at(i);
+//        }
+//
+//        currentPathweight += graph[k][0];
+//
+//        // update minimum
+//        min_path = std::min(min_path, currentPathweight);
+//    }
 
 
     return min_path;
