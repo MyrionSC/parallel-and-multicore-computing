@@ -8,7 +8,7 @@ using namespace std;
 #define MAX_NODES 1000
 static int nrNodes = -1;
 
-void three_clique(int pInt[1000][1000]);
+void four_clique(int graph[MAX_NODES][MAX_NODES]);
 
 // A utility function to find the vertex with minimum distance value, from
 // the set of vertices not yet included in shortest path tree
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
         graph[src][dst] = wgt;
     }
 
-    three_clique(graph);
+    four_clique(graph);
 
     /// Print execution time.
     timeEnd = omp_get_wtime();
@@ -112,15 +112,18 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void three_clique(int graph[MAX_NODES][MAX_NODES]) {
-    for (int i = 0; i < nrNodes-1; ++i) {
+void four_clique(int graph[MAX_NODES][MAX_NODES]) {
+    for (int i = 0; i < nrNodes - 1; ++i) {
         for (int j = 0; j < nrNodes - 1; ++j) {
             for (int k = 0; k < nrNodes - 1; ++k) {
-                // check for three clique. The graph is undirected, so only need to check one direction
-                if (graph[i][j] >= 1 && graph[i][k] >= 1 && graph[j][k] >= 1) {
-                    // print nodes or add to set or something
-                    // adding to set would be best since we don't get duplicates like that
-                    printf("Three clique detected: %d %d %d\n", i, j, k);
+                for (int l = 0; l < nrNodes - 1; ++l) {
+                    // check for four clique. The graph is undirected, so only need to check one direction
+                    if (graph[i][j] >= 1 && graph[i][k] >= 1 && graph[i][l] >= 1 &&
+                        graph[j][k] >= 1 && graph[j][l] >= 1 && graph[k][l] >= 1) {
+                        // print nodes or add to set or something
+                        // adding to set would be best since we don't get duplicates like that
+//                        printf("four clique detected: %d %d %d %d\n", i, j, k, l);
+                    }
                 }
             }
         }
