@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <limits.h>
 #include "omp.h"
 
 // Number of vertices in the graph

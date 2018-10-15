@@ -1,18 +1,32 @@
 #include <bits/stdc++.h>
 #include "omp.h"
+#include "mpi.h"
 
 // Number of vertices in the graph
 #define MAX_NODES 1000
 static int nrNodes = -1;
 
-void four_clique(int graph[MAX_NODES][MAX_NODES]);
+void four_clique(int graph[MAX_NODES][MAX_NODES], int idProcess, int nrProcesses);
 void print_graph(int graph[MAX_NODES][MAX_NODES]);
+
+int graph[MAX_NODES][MAX_NODES] = {0};
 
 // driver program to test above function
 int main(int argc, char *argv[])
 {
-    // init graph with zeroes
-    int graph[MAX_NODES][MAX_NODES] = {0};
+    /// OpenMP
+    int maxNrThreads = omp_get_max_threads();
+    printf("Max threads: %d\n", maxNrThreads);
+    omp_set_num_threads(maxNrThreads);
+
+    /// OpenMPI
+    int root = 0;
+    int nrProcesses, idProcces;
+    MPI_Init(NULL, NULL);
+    MPI_Comm_size(MPI_COMM_WORLD, &nrProcesses);
+    MPI_Comm_rank(MPI_COMM_WORLD, &idProcces);
+    printf("num processes: %d\n", nrProcesses);
+    printf("Process Id: %d\n\n", idProcces);
 
     if(argc != 2){
         printf("The path to the input file is not specified as a parameter.\n");
@@ -25,8 +39,8 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-
     /// Read input file.
+    int nrNodes = -1;
     fscanf(in_file,"%d", &nrNodes);
     int src, dst, wgt;
 
@@ -34,31 +48,26 @@ int main(int argc, char *argv[])
         graph[src][dst] = wgt;
     }
 
-    /// Timing scope.
-    double timeBegin, timeEnd;
-    timeBegin = omp_get_wtime();
+    four_clique(graph, idProcces, nrProcesses);
 
-    four_clique(graph);
-//    print_graph(graph);
-
-    /// Print execution time.
-    timeEnd = omp_get_wtime();
-    printf("Execution time: %.16g", timeEnd-timeBegin);
-
+    MPI_Finalize();
     return 0;
 }
 
-void four_clique(int graph[MAX_NODES][MAX_NODES]) {
-    for (int i = 0; i < nrNodes - 1; ++i) {
+void four_clique(int graph[MAX_NODES][MAX_NODES], int idProcess, int nrProcesses) {
+    for (int i = 0; (i + idProcess) < nrNodes - 1; i += nrProcesses) {
+        int para_i = i + idProcess;
+
+        #pragma omp parallel for
         for (int j = 0; j < nrNodes - 1; ++j) {
             for (int k = 0; k < nrNodes - 1; ++k) {
                 for (int l = 0; l < nrNodes - 1; ++l) {
                     // check for four clique. The graph is undirected, so only need to check one direction
-                    if (graph[i][j] >= 1 && graph[i][k] >= 1 && graph[i][l] >= 1 &&
+                    if (graph[para_i][j] >= 1 && graph[para_i][k] >= 1 && graph[para_i][l] >= 1 &&
                         graph[j][k] >= 1 && graph[j][l] >= 1 && graph[k][l] >= 1) {
                         // print nodes or add to set or something
                         // adding to set would be best since we don't get duplicates like that
-//                        printf("four clique detected: %d %d %d %d\n", i, j, k, l);
+//                        printf("four clique detected: %d %d %d %d\n", para_i, j, k, l);
                     }
                 }
             }
