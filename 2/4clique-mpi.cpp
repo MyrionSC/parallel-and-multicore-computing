@@ -17,8 +17,8 @@ int main(int argc, char *argv[]) {
     MPI_Init(NULL, NULL);
     MPI_Comm_rank(MPI_COMM_WORLD, &idProcces);
     MPI_Comm_size(MPI_COMM_WORLD, &nrProcesses);
-    printf("Process Id: %d\n\n", idProcces);
-    printf("num processes: %d\n", nrProcesses);
+//    printf("Process Id: %d\n\n", idProcces);
+//    printf("num processes: %d\n", nrProcesses);
 
     // init graph with zeroes
     int graph[MAX_NODES][MAX_NODES] = {0};
@@ -44,15 +44,15 @@ int main(int argc, char *argv[]) {
     }
 
     /// Timing scope.
-    double timeBegin, timeEnd;
-    timeBegin = omp_get_wtime();
+//    double timeBegin, timeEnd;
+//    timeBegin = omp_get_wtime();
 
     four_clique(graph, idProcces, nrProcesses);
 //    print_graph(graph);
 
     /// Print execution time.
-    timeEnd = omp_get_wtime();
-    printf("Execution time: %.16g", timeEnd-timeBegin);
+//    timeEnd = omp_get_wtime();
+//    printf("Execution time: %.16g", timeEnd-timeBegin);
 
     MPI_Finalize();
     return 0;
@@ -60,6 +60,7 @@ int main(int argc, char *argv[]) {
 
 
 void four_clique(int graph[MAX_NODES][MAX_NODES], int idProcess, int nrProcesses) {
+    int nrCliques = 0;
     for (int i = 0; (i + idProcess) < nrNodes - 1; i += nrProcesses) {
         int para_i = i + idProcess;
         for (int j = 0; j < nrNodes - 1; ++j) {
@@ -68,13 +69,19 @@ void four_clique(int graph[MAX_NODES][MAX_NODES], int idProcess, int nrProcesses
                     // check for four clique. The graph is undirected, so only need to check one direction
                     if (graph[para_i][j] >= 1 && graph[para_i][k] >= 1 && graph[para_i][l] >= 1 &&
                         graph[j][k] >= 1 && graph[j][l] >= 1 && graph[k][l] >= 1) {
-                        // print nodes or add to set or something
-                        // adding to set would be best since we don't get duplicates like that
-//                        printf("four clique detected: %d %d %d %d\n", para_i, j, k, l);
+                        nrCliques++;
                     }
                 }
             }
         }
+    }
+
+    int globalCount = 0;
+//    printf("procId: %d, cliques num: %d\n", idProcess, nrCliques);
+    MPI_Reduce(&nrCliques, &globalCount,1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    if (idProcess == 0) {
+        printf("Number of four cliques: %d\n", globalCount);
     }
 }
 

@@ -64,9 +64,7 @@ void four_clique(int graph[MAX_NODES][MAX_NODES]) {
                     // check for four clique. The graph is undirected, so only need to check one direction
                     if (graph[i][j] >= 1 && graph[i][k] >= 1 && graph[i][l] >= 1 &&
                         graph[j][k] >= 1 && graph[j][l] >= 1 && graph[k][l] >= 1) {
-                        // print nodes or add to set or something
-                        // adding to set would be best since we don't get duplicates like that
-//                        printf("four clique detected: %d %d %d %d\n", i, j, k, l);
+                        // maybe use mutex here. There are race condition risks (although it would be very unlucky with sparse graphs)
                         nrCliques++;
                     }
                 }
