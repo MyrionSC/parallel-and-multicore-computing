@@ -12,7 +12,7 @@ void print_graph(int graph[MAX_NODES][MAX_NODES]);
 // driver program to test above function
 int main(int argc, char *argv[])
 {
-    /* Let us create the example graph discussed above */
+    // init graph with zeroes
     int graph[MAX_NODES][MAX_NODES] = {0};
 
     if(argc != 2){
@@ -26,9 +26,6 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    /// Timing scope.
-    double timeBegin, timeEnd;
-    timeBegin = omp_get_wtime();
 
     /// Read input file.
     fscanf(in_file,"%d", &nrNodes);
@@ -38,8 +35,12 @@ int main(int argc, char *argv[])
         graph[src][dst] = wgt;
     }
 
+    /// Timing scope.
+    double timeBegin, timeEnd;
+    timeBegin = omp_get_wtime();
+
     four_clique(graph);
-    print_graph(graph);
+//    print_graph(graph);
 
     /// Print execution time.
     timeEnd = omp_get_wtime();
@@ -58,7 +59,7 @@ void four_clique(int graph[MAX_NODES][MAX_NODES]) {
                         graph[j][k] >= 1 && graph[j][l] >= 1 && graph[k][l] >= 1) {
                         // print nodes or add to set or something
                         // adding to set would be best since we don't get duplicates like that
-                        printf("four clique detected: %d %d %d %d\n", i, j, k, l);
+//                        printf("four clique detected: %d %d %d %d\n", i, j, k, l);
                     }
                 }
             }
