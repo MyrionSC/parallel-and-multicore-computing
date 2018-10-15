@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
 }
 
 void four_clique(int graph[MAX_NODES][MAX_NODES]) {
+    int nrCliques = 0;
     for (int i = 0; i < nrNodes - 1; ++i) {
         for (int j = 0; j < nrNodes - 1; ++j) {
             for (int k = 0; k < nrNodes - 1; ++k) {
@@ -59,11 +60,13 @@ void four_clique(int graph[MAX_NODES][MAX_NODES]) {
                         // print nodes or add to set or something
                         // adding to set would be best since we don't get duplicates like that
 //                        printf("four clique detected: %d %d %d %d\n", i, j, k, l);
+                        nrCliques++;
                     }
                 }
             }
         }
     }
+    printf("Number of four cliques: %d\n", nrCliques);
 }
 
 // for debugging
