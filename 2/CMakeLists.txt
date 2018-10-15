@@ -13,6 +13,6 @@ if (OPENMP_FOUND)
 endif()
 
 add_executable(2-seq 4clique-sequential.cpp)
-add_executable(2-mp tsp-mp.cpp)
-add_executable(2-mpi tsp-mpi.cpp)
+add_executable(2-mp 4clique-mp.cpp)
+add_executable(2-mpi 4clique-mpi.cpp)
 add_executable(2-hybrid tsp-hybrid.cpp)
