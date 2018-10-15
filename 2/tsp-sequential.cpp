@@ -1,10 +1,14 @@
 #include <bits/stdc++.h>
 #include <limits.h>
+#include <string.h>
 #include "omp.h"
+using namespace std;
 
 // Number of vertices in the graph
 #define MAX_NODES 1000
 static int nrNodes = -1;
+
+void three_clique(int pInt[1000][1000]);
 
 // A utility function to find the vertex with minimum distance value, from
 // the set of vertices not yet included in shortest path tree
@@ -30,7 +34,7 @@ int printSolution(int dist[], int n)
 
 // Function that implements Dijkstra's single source shortest path algorithm
 // for a graph represented using adjacency matrix representation
-void dijkstra(int graph[MAX_NODES][MAX_NODES], int src)
+void three_clique(int **graph, int src)
 {
     int dist[nrNodes];     // The output array.  dist[i] will hold the shortest
     // distance from src to i
@@ -99,11 +103,26 @@ int main(int argc, char *argv[])
         graph[src][dst] = wgt;
     }
 
-    dijkstra(graph, 0);
+    three_clique(graph);
 
     /// Print execution time.
     timeEnd = omp_get_wtime();
     printf("%.16g", timeEnd-timeBegin);
 
     return 0;
+}
+
+void three_clique(int graph[MAX_NODES][MAX_NODES]) {
+    for (int i = 0; i < nrNodes-1; ++i) {
+        for (int j = 0; j < nrNodes - 1; ++j) {
+            for (int k = 0; k < nrNodes - 1; ++k) {
+                // check for three clique. The graph is undirected, so only need to check one direction
+                if (graph[i][j] >= 1 && graph[i][k] >= 1 && graph[j][k] >= 1) {
+                    // print nodes or add to set or something
+                    // adding to set would be best since we don't get duplicates like that
+                    printf("Three clique detected: %d %d %d\n", i, j, k);
+                }
+            }
+        }
+    }
 }
