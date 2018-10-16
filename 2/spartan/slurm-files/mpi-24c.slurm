@@ -2,15 +2,15 @@
 
 #SBATCH --array=0-10
 #SBATCH --partition=physical
-#SBATCH --output=output/mpi-4c-%a.out
-#SBATCH --job-name="mpi-4c"
+#SBATCH --output=output/mpi-24c-%a.out
+#SBATCH --job-name="mpi-24c"
 #SBATCH --time=0-00:30:00
-#SBATCH --ntasks=4
+#SBATCH --ntasks=24
 
 module load OpenMPI/2.1.2-GCC-6.4.0-2.28
 
 echo " "
-echo " *** MPI 4 tasks ***"
+echo " *** MPI 24 tasks ***"
 echo " "
 
 # compile files
