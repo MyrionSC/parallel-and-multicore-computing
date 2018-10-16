@@ -4,10 +4,9 @@
 
 // Number of vertices in the graph
 #define MAX_NODES 1000
-static int nrNodes = -1;
 
-void four_clique(int graph[MAX_NODES][MAX_NODES], int idProcess, int nrProcesses);
-void print_graph(int graph[MAX_NODES][MAX_NODES]);
+void four_clique(int graph[MAX_NODES][MAX_NODES], int idProcess, int nrProcesses, int nrNodes);
+void print_graph(int graph[MAX_NODES][MAX_NODES], int nrNodes);
 
 int graph[MAX_NODES][MAX_NODES] = {0};
 
@@ -54,7 +53,7 @@ int main(int argc, char *argv[])
         timeBegin = omp_get_wtime();
     }
 
-    four_clique(graph, idProcces, nrProcesses);
+    four_clique(graph, idProcces, nrProcesses, nrNodes);
 
     /// Print execution time.
     if (idProcces == 0) {
@@ -66,8 +65,9 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void four_clique(int graph[MAX_NODES][MAX_NODES], int idProcess, int nrProcesses) {
+void four_clique(int graph[MAX_NODES][MAX_NODES], int idProcess, int nrProcesses, int nrNodes) {
     int nrCliques = 0;
+
     for (int i = 0; (i + idProcess) < nrNodes - 1; i += nrProcesses) {
         int para_i = i + idProcess;
 
@@ -95,7 +95,7 @@ void four_clique(int graph[MAX_NODES][MAX_NODES], int idProcess, int nrProcesses
 }
 
 // for debugging
-void print_graph(int graph[MAX_NODES][MAX_NODES]) {
+void print_graph(int graph[MAX_NODES][MAX_NODES], int nrNodes) {
     printf("\n");
     for (int i = 0; i < nrNodes - 1; ++i) {
         for (int j = 0; j < nrNodes - 1; ++j) {
