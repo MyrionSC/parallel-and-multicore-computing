@@ -6,17 +6,17 @@
 #SBATCH --time=0-0:10:00
 #SBATCH --ntasks=1
 
-echo " "
-echo " *** Sequential ***"
-echo " "
+#echo " "
+#echo " *** Sequential ***"
+#echo " "
 
 module load GCC/6.2.0
 
 # compile files
 g++ -fopenmp ../4clique-sequential.cpp -o 4clique-seq
 
-./4clique-seq ../input/350.txt
-echo " "
+echo "sec $(./4clique-seq ../input/350.txt)"
+#echo " "
 
 
 

@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 
     /// Print execution time.
     timeEnd = omp_get_wtime();
-    printf("Execution time: %.16g", timeEnd-timeBegin);
+    printf("%.16g", timeEnd-timeBegin);
 
     return 0;
 }
@@ -63,7 +63,8 @@ void four_clique(int graph[MAX_NODES][MAX_NODES]) {
             }
         }
     }
-    printf("Number of four cliques: %d\n", nrCliques);
+//    printf("Number of four cliques: %d\n", nrCliques);
+    printf("%d ", nrCliques);
 }
 
 // for debugging
