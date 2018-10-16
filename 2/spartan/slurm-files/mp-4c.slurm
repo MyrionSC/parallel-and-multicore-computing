@@ -13,8 +13,10 @@ echo " "
 echo " *** MP 1 Nodes, 4 Cores ***"
 echo " "
 
+module load GCC/6.2.0
+
 # compile files
-g++ -fopenmp 4clique-mp.cpp -o 4clique-mp
+g++ -fopenmp ../4clique-mp.cpp -o 4clique-mp
 
 ./4clique-mp ../input/350.txt
 echo " "
