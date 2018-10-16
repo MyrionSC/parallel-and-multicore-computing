@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     /// Print execution time.
     if (idProcces == 0) {
         timeEnd = omp_get_wtime();
-        printf("Execution time: %.16g", timeEnd-timeBegin);
+        printf("%.16g", timeEnd-timeBegin);
     }
 
     MPI_Finalize();
@@ -85,7 +85,7 @@ void four_clique(int graph[MAX_NODES][MAX_NODES], int idProcess, int nrProcesses
     MPI_Reduce(&nrCliques, &globalCount,1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
     if (idProcess == 0) {
-        printf("Number of four cliques: %d\n", globalCount);
+        printf("%d ", globalCount);
     }
 }
 

@@ -9,16 +9,15 @@
 
 module load OpenMPI/2.1.2-GCC-6.4.0-2.28
 
-echo " "
-echo " *** MPI 16 tasks ***"
-echo " "
+#echo " "
+#echo " *** MPI 16 tasks ***"
+#echo " "
 
 # compile files
 #mpic++ --fopenmp std=c++11 ../knapsack-mpi.cpp -o knapsack-mpi
 mpic++ -fopenmp ../4clique-mpi.cpp -o 4clique-mpi
 
-mpirun ./4clique-mpi ../input/350.txt
-echo " "
+echo "mpi-16c $(mpirun ./4clique-mpi ../input/350.txt)"
 
 
 

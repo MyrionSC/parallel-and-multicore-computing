@@ -9,17 +9,16 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
 
-echo " "
-echo " *** MP 1 Nodes, 8 Cores ***"
-echo " "
+#echo " "
+#echo " *** MP 1 Nodes, 8 Cores ***"
+#echo " "
 
 module load GCC/6.2.0
 
 # compile files
 g++ -fopenmp ../4clique-mp.cpp -o 4clique-mp
 
-./4clique-mp ../input/350.txt
-echo " "
+echo "mp-8c $(./4clique-mp ../input/350.txt)"
 
 
 
