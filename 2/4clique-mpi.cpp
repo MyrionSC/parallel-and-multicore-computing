@@ -44,15 +44,19 @@ int main(int argc, char *argv[]) {
     }
 
     /// Timing scope.
-//    double timeBegin, timeEnd;
-//    timeBegin = omp_get_wtime();
+    double timeBegin, timeEnd;
+    if (idProcces == 0) {
+        timeBegin = omp_get_wtime();
+    }
 
     four_clique(graph, idProcces, nrProcesses);
 //    print_graph(graph);
 
     /// Print execution time.
-//    timeEnd = omp_get_wtime();
-//    printf("Execution time: %.16g", timeEnd-timeBegin);
+    if (idProcces == 0) {
+        timeEnd = omp_get_wtime();
+        printf("Execution time: %.16g", timeEnd-timeBegin);
+    }
 
     MPI_Finalize();
     return 0;
