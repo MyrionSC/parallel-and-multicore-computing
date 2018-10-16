@@ -1,9 +1,10 @@
 #!/bin/bash
 
+#SBATCH --array=0-10
 #SBATCH --partition=physical
-#SBATCH --output=output/seq.out
+#SBATCH --output=output/seq-%a.out
 #SBATCH --job-name="seq"
-#SBATCH --time=0-0:10:00
+#SBATCH --time=0-0:30:00
 #SBATCH --ntasks=1
 
 #echo " "
