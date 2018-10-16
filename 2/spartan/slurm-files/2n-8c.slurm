@@ -8,6 +8,9 @@
 #SBATCH --ntasks=8 
 ###SBATCH --cpus-per-task=1
 
+###SBATCH --array=0-10
+###SBATCH --output=output/32c-run-%a.out
+
 module load OpenMPI/2.1.2-GCC-6.4.0-2.28
 
 echo " "

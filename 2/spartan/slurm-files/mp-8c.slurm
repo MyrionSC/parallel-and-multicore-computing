@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#SBATCH --partition=physical
+#SBATCH --array=0-10
+#SBATCH --output=output/mp-8c-run-%a.out
+#SBATCH --job-name="mp-8c"
+#SBATCH --time=0-00:30:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+
+echo " "
+echo " *** MP 1 Nodes, 8 Cores ***"
+echo " "
+
+# compile files
+g++ -fopenmp 4clique-mp.cpp -o 4clique-mp
+
+./4clique-mp ../input/350.txt
+echo " "
+
+
+

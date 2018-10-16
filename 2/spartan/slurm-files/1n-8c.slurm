@@ -5,8 +5,11 @@
 #SBATCH --job-name="1n-8c"
 #SBATCH --time=0-12:00:00
 #SBATCH --nodes=1
-#SBATCH --ntasks=8 
+#SBATCH --ntasks=8
 ###SBATCH --cpus-per-task=1
+
+###SBATCH --array=0-10
+###SBATCH --output=output/32c-run-%a.out
 
 module load OpenMPI/2.1.2-GCC-6.4.0-2.28
 
