@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 {
     /// OpenMP
     int maxNrThreads = omp_get_max_threads();
-    printf("Max threads: %d\n", maxNrThreads);
+//    printf("Max threads: %d\n", maxNrThreads);
     omp_set_num_threads(maxNrThreads);
 
     /// OpenMPI

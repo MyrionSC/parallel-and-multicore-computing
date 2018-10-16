@@ -12,7 +12,7 @@ void print_graph(int graph[MAX_NODES][MAX_NODES]);
 int main(int argc, char *argv[])
 {
     int maxNrThreads = omp_get_max_threads();
-    printf("Max threads: %d\n", maxNrThreads);
+//    printf("Max threads: %d\n", maxNrThreads);
 
     /// Set number of threads.
     omp_set_num_threads(maxNrThreads);
