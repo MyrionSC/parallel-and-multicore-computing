@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --array=0-10
-#SBATCH --partition=physical
+#SBATCH --partition=cloud
 #SBATCH --output=output/hybrid-3n-24c-%a.out
 #SBATCH --job-name="hybrid-3n-24c"
 #SBATCH --time=0-00:30:00

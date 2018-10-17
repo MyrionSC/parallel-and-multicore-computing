@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --array=0-10
-#SBATCH --partition=physical
+#SBATCH --partition=cloud
 #SBATCH --output=output/seq-%a.out
 #SBATCH --job-name="seq"
 #SBATCH --time=0-0:30:00

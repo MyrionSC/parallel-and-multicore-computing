@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --partition=physical
+#SBATCH --partition=cloud
 #SBATCH --array=0-10
 #SBATCH --output=output/mp-4c-run-%a.out
 #SBATCH --job-name="mp-4c"
