@@ -14,8 +14,9 @@ int main(int argc, char *argv[])
     int maxNrThreads = omp_get_max_threads();
 //    printf("Max threads: %d\n", maxNrThreads);
 
+
     /// Set number of threads.
-    omp_set_num_threads(maxNrThreads);
+    omp_set_num_threads(2);
 
     // init graph with zeroes
     int graph[MAX_NODES][MAX_NODES] = {0};
@@ -56,7 +57,7 @@ int main(int argc, char *argv[])
 void four_clique(int graph[MAX_NODES][MAX_NODES]) {
     int nrCliques = 0;
 
-    #pragma omp parallel for
+    #pragma omp parallel for schedule(static, 1)
     for (int i = 0; i < nrNodes - 1; ++i) {
         for (int j = 0; j < nrNodes - 1; ++j) {
             for (int k = 0; k < nrNodes - 1; ++k) {
