@@ -1,0 +1,6 @@
+As stated in the report, our project contains 4 versions of the same algorithm (sequential, OpenMP, OpenMPI and hybrid), each of which takes as input a graph in file format (see code/input/350.txt for example).
+
+The code directory contains our code, slurm files and input. Due to lack of spartan resources, the results from the report is not from the slurm files run on spartan, but from local runs of each version. These runs are specified in the run-jobs-locally.sh bash script. They require quite a bit of manual compilation work to be run, however.
+
+To verify that everything runs, running the slurm files should be sufficient.
+
